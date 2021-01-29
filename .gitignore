@@ -65,3 +65,7 @@ crashlytics-build.properties
 /.idea/*
 /.vs/*
 /Assets/ProCore/ProBuilder/Data/*
+
+#Wwise files
+*.akd
+*.cache/
