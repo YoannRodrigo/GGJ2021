@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using mechanism;
 
 [RequireComponent(typeof(Renderer))]
 [RequireComponent(typeof(ParticleSystem))]
@@ -12,6 +13,7 @@ public class GroundTile : MonoBehaviour
     [SerializeField] private bool isSelected;
     [SerializeField] private ParticleSystem haloToSelect;
     [SerializeField] private FloorManager floorManager;
+    [SerializeField] private List<Mechanism> mechanisms = default;
     private Tuple<int, int> id;
     private Renderer thisRenderer;
     private List<GameObject> listLight = new List<GameObject>();
@@ -21,12 +23,12 @@ public class GroundTile : MonoBehaviour
     {
         this.floorManager = floorManager;
     }
-    
+
     public void SetID(int x, int z)
     {
         id = new Tuple<int, int>(x, z);
     }
-    
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -44,7 +46,7 @@ public class GroundTile : MonoBehaviour
             if (resultHit.collider.transform.GetInstanceID() == transform.GetInstanceID())
             {
                 haloToSelect.Play();
-                if(Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0))
                 {
                     if (floorManager.IsTileSelected() && floorManager.GetSelectedTile().GetInstanceID() != gameObject.GetInstanceID())
                     {
@@ -63,7 +65,7 @@ public class GroundTile : MonoBehaviour
             }
             else
             {
-                if(!isSelected)
+                if (!isSelected)
                 {
                     haloToSelect.Clear();
                     haloToSelect.Stop();
@@ -72,17 +74,17 @@ public class GroundTile : MonoBehaviour
         }
         else
         {
-            if(!isSelected)
+            if (!isSelected)
             {
                 haloToSelect.Clear();
                 haloToSelect.Stop();
             }
         }
-        
-        
-        
-        
-        if(!isForceEnlighten)
+
+
+
+
+        if (!isForceEnlighten)
         {
             UpdateListLight();
             switch (isEnlighten)
@@ -132,5 +134,12 @@ public class GroundTile : MonoBehaviour
     public void Unselect()
     {
         isSelected = false;
+    }
+    public void ActivateSwitch()
+    {
+        foreach (Mechanism mechanism in mechanisms)
+        {
+            mechanism.ActivateMechanism();
+        }
     }
 }
