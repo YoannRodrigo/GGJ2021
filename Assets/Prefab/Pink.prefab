@@ -16,9 +16,9 @@ GameObject:
   - component: {fileID: 562205547300508964}
   - component: {fileID: -2522489401527545131}
   - component: {fileID: 4592491372770204778}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Pink
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -131,6 +131,7 @@ MonoBehaviour:
   isEnlighten: 1
   isForceEnlighten: 1
   isSelected: 0
+  isForceDeactivate: 0
   haloToSelect: {fileID: 0}
   floorManager: {fileID: 0}
   mechanisms: []
@@ -4934,7 +4935,7 @@ GameObject:
   - component: {fileID: 6083019145512795710}
   - component: {fileID: 7776798757160174036}
   - component: {fileID: 4544308483693361391}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Pink
   m_TagString: Untagged
   m_Icon: {fileID: 0}

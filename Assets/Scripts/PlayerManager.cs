@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using wisp;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerManager : MonoBehaviour
@@ -27,12 +29,13 @@ public class PlayerManager : MonoBehaviour
         if (currentTile == null)
         {
             currentTile = tile;
+            wisp.SetPosition(tile);
         }
     }
 
     public void SetPath(List<GroundTile> path)
     {
-        this.path = new List<GroundTile>(path);
+        this.path = path;
     }
 
     private void Start()
@@ -51,12 +54,20 @@ public class PlayerManager : MonoBehaviour
         if (path.Count != 0)
         {
             target = path[path.Count - 1];
-            if (Vector3.Distance(target.transform.position, transform.position) < 0.01f)
+            if(target.IsActive())
             {
-                currentTile = target;
-                path.RemoveAt(path.Count - 1);
+                if (Vector3.Distance(target.transform.position, transform.position) < 0.01f)
+                {
+                    currentTile = target;
+                    path.RemoveAt(path.Count - 1);
+                }
+
+                transform.DOMove(target.transform.position, 0.2f).SetEase(Ease.Linear);
             }
-            transform.DOMove(target.transform.position, 0.2f).SetEase(Ease.Linear);
+            else
+            {
+                path.Clear();
+            }
         }
     }
 
@@ -68,5 +79,10 @@ public class PlayerManager : MonoBehaviour
     private void DeactivateSwitchOnTile()
     {
         currentTile.DeactivateSwitches();
+    }
+
+    public void Win()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

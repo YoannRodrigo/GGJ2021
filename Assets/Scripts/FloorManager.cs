@@ -11,6 +11,7 @@ public class FloorManager : MonoBehaviour
     [SerializeField] private List<GroundTile> path;
     private bool isTileSelected;
     [SerializeField] private GroundTile playerTile;
+    private int size = 15;
 
     public void SetPlayerTile(GroundTile playerTile)
     {
@@ -38,7 +39,7 @@ public class FloorManager : MonoBehaviour
         isTileSelected = true;
         this.selectedTile = selectedTile;
         ResetPathColor();
-        PrintShortestDistance(playerTile.GetAllNeighbors(), playerTile, selectedTile, grounds.Count);
+        PrintShortestDistance(playerTile.GetAllNeighbors(), playerTile, selectedTile, grounds.Count,size);
     }
 
     private void ResetPathColor()
@@ -92,7 +93,7 @@ public class FloorManager : MonoBehaviour
         }
     }
     
-    private void PrintShortestDistance(List<GroundTile> adj, GroundTile start, GroundTile dest, int v)
+    private void PrintShortestDistance(List<GroundTile> adj, GroundTile start, GroundTile dest, int v, int size)
     {
         GroundTile[] pred = new GroundTile[v];
         int []dist = new int[v];
@@ -114,13 +115,11 @@ public class FloorManager : MonoBehaviour
             crawl = pred[crawl.GetId()];
         }
 
-        this.path = path;
-        
-        for (int i = path.Count - 1; 
-            i >= 0; i--) 
+        if(path.Count <= size)
         {
-            Console.Write(path[i] + " ");
+            this.path = path;
         }
+        
     }
     
     private bool Bfs(GroundTile start, GroundTile dest, int v, GroundTile[] previousTile, int []dist)
@@ -160,4 +159,63 @@ public class FloorManager : MonoBehaviour
         }
         return false;
     }
+
+    public void ResetList()
+    {
+        grounds.Clear();
+        tilesPosition.Clear();
+    }
+    public List<GroundTile> GetBfs(GroundTile start, GroundTile dest)
+    {
+        int v = grounds.Count;
+        GroundTile[] previousTile = new GroundTile[v];
+        int[] dist = new int[v];
+        List<GroundTile> queue = new List<GroundTile>();
+
+        bool[] visited = new bool[v];
+
+        for (int i = 0; i < v; i++)
+        {
+            visited[i] = false;
+            dist[i] = int.MaxValue;
+            previousTile[i] = null;
+        }
+        visited[start.GetId()] = true;
+        dist[start.GetId()] = 0;
+        queue.Add(start);
+
+        while (queue.Count != 0)
+        {
+            GroundTile u = queue[0];
+            queue.RemoveAt(0);
+
+            for (int i = 0; i < u.GetAllNeighbors().Count; i++)
+            {
+                GroundTile currentNeighbor = u.GetAllNeighbors()[i];
+                if (visited[currentNeighbor.GetId()] == false)
+                {
+                    visited[currentNeighbor.GetId()] = true;
+                    dist[currentNeighbor.GetId()] = dist[u.GetId()] + 1;
+                    previousTile[currentNeighbor.GetId()] = u;
+                    queue.Add(currentNeighbor);
+                    if (currentNeighbor.GetId() == dest.GetId())
+                    {
+                        List<GroundTile> path = new List<GroundTile>();
+                        GroundTile crawl = dest;
+                        path.Add(crawl);
+
+                        while (previousTile[crawl.GetId()] != null)
+                        {
+                            path.Add(previousTile[crawl.GetId()]);
+                            crawl = previousTile[crawl.GetId()];
+                        }
+                        path.Reverse();
+                        return path;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
 }
