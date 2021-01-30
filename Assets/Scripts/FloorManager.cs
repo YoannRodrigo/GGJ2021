@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +15,7 @@ public class FloorManager : MonoBehaviour
     public void SetPlayerTile(GroundTile playerTile)
     {
         this.playerTile = playerTile;
+        playerManager.InitPlayerTile(playerTile);
     }
 
     public void AddATile(GroundTile tile)
