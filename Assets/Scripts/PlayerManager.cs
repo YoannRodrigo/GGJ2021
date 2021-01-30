@@ -12,6 +12,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GroundTile target;
     [SerializeField] private bool canMove;
     [SerializeField] private List<GroundTile> path;
+    [SerializeField] private Wisp wisp;
     private Rigidbody thisRigidbody;
     //Cards
     [Space]
