@@ -199,6 +199,20 @@ public class GroundTile : MonoBehaviour
             }
         }
     }
+    public void ActivateMechanisms()
+    {
+        foreach (Mechanism mechanism in mechanisms)
+        {
+            mechanism.ActivateMechanism();
+        }
+    }
+    public void DeactivateMechanisms()
+    {
+        foreach (Mechanism mechanism in mechanisms)
+        {
+            mechanism.DeactivateMechanism();
+        }
+    }
     public void FindNeighbors()
     {
         foreach (GroundTile neighborToFind in possibleNeighborsPosition.Select(possibleNeighborPosition =>
