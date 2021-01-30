@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -12,19 +11,29 @@ public class GroundTile : MonoBehaviour
     [SerializeField] private bool isSelected;
     [SerializeField] private ParticleSystem haloToSelect;
     [SerializeField] private FloorManager floorManager;
-    private Tuple<int, int> id;
+    [SerializeField] private List<Vector3> possibleNeighborsPosition = new List<Vector3>();
+    [SerializeField] private int id;
     private Renderer thisRenderer;
     private List<GameObject> listLight = new List<GameObject>();
     private Camera mainCamera;
+    private MaterialPropertyBlock propertyBlock;
+    [SerializeField] private List<GroundTile> neighbors;
+    private static readonly int COLOR = Shader.PropertyToID("_Color");
+    private Color baseColor;
 
     public void SetFloorManager(FloorManager floorManager)
     {
         this.floorManager = floorManager;
     }
-    
-    public void SetID(int x, int z)
+
+    public int GetId()
     {
-        id = new Tuple<int, int>(x, z);
+        return id;
+    }
+    
+    public void SetID(int x)
+    {
+        id = x;
     }
     
     // Start is called before the first frame update
@@ -33,6 +42,9 @@ public class GroundTile : MonoBehaviour
         thisRenderer = GetComponent<Renderer>();
         haloToSelect = GetComponent<ParticleSystem>();
         mainCamera = Camera.main;
+        propertyBlock = new MaterialPropertyBlock();
+        thisRenderer.GetPropertyBlock(propertyBlock);
+        baseColor = new Color(propertyBlock.GetColor(COLOR).r,propertyBlock.GetColor(COLOR).g,propertyBlock.GetColor(COLOR).b,propertyBlock.GetColor(COLOR).a);
     }
 
     // Update is called once per frame
@@ -118,6 +130,11 @@ public class GroundTile : MonoBehaviour
             print("In");
             isEnlighten = true;
         }
+
+        if (other.CompareTag("Player"))
+        {
+            floorManager.SetPlayerTile(this);
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -132,5 +149,33 @@ public class GroundTile : MonoBehaviour
     public void Unselect()
     {
         isSelected = false;
+    }
+    
+    public void FindNeighbors()
+    {
+        foreach (GroundTile neighborToFind in possibleNeighborsPosition.Select(possibleNeighborPosition => 
+            floorManager.GetTileByPosition(possibleNeighborPosition+transform.position)).Where(neighborToFind => neighborToFind))
+        {
+            neighbors.Add(neighborToFind);
+        }
+    }
+
+    public List<GroundTile> GetAllNeighbors()
+    {
+        return neighbors;
+    }
+
+    public void SetIsPath()
+    {
+        thisRenderer.GetPropertyBlock(propertyBlock);
+        propertyBlock.SetColor(COLOR, new Color(0,0.5f,0));
+        thisRenderer.SetPropertyBlock(propertyBlock);
+    }
+
+    public void UnSetPathPathColor()
+    {
+        thisRenderer.GetPropertyBlock(propertyBlock);
+        propertyBlock.SetColor(COLOR, baseColor);
+        thisRenderer.SetPropertyBlock(propertyBlock);
     }
 }
