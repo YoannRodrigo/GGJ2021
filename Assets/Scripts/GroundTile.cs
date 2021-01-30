@@ -3,7 +3,6 @@ using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Renderer))]
-[RequireComponent(typeof(ParticleSystem))]
 public class GroundTile : MonoBehaviour
 {
     [SerializeField] private bool isEnlighten = true;
@@ -70,7 +69,7 @@ public class GroundTile : MonoBehaviour
     private void Start()
     {
         thisRenderer = GetComponent<Renderer>();
-        haloToSelect = GetComponent<ParticleSystem>();
+        //haloToSelect = GetComponent<ParticleSystem>();
         mainCamera = Camera.main;
         propertyBlock = new MaterialPropertyBlock();
         baseColor = thisRenderer.material.color;
