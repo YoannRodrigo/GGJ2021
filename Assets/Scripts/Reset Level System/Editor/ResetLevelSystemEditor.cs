@@ -13,10 +13,10 @@ public class ResetLevelSystemEditor : Editor
             ResetLevelSystem resetSystem = (ResetLevelSystem)target;
             resetSystem.GetAllMechanisms();
         }
-        if (GUILayout.Button("Reset Mechanisms in Scene"))
+        if (GUILayout.Button("Reset Scene"))
         {
             ResetLevelSystem resetSystem = (ResetLevelSystem)target;
-            resetSystem.ResetMechanismsToOriginalState();
+            resetSystem.ResetToOriginalState();
         }
         base.OnInspectorGUI();
     }

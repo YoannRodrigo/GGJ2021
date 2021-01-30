@@ -14,6 +14,9 @@ public class Wisp : MonoBehaviour
     private float _floatYDistance = .3f;
     private float _floatDuration = 1f; //in seconds
 
+    public GroundTile CurrentTile { get => _currentTile; set => _currentTile = value; }
+        public event Action<GroundTile> InitCurrentTile;
+
     private void Start()
     {
         _objectPooler = ObjectPooler.Instance;
@@ -28,7 +31,7 @@ public class Wisp : MonoBehaviour
     }
     public void MoveToTile(GroundTile tile)
     {
-        _path = _floorManager.GetBfs(_currentTile, tile);
+        _path = _floorManager.GetBfs(CurrentTile, tile);
         if (_path != null)
         {
             _path.RemoveAt(0);
@@ -47,7 +50,8 @@ public class Wisp : MonoBehaviour
 
     public void SetPosition(GroundTile tile)
     {
-        _currentTile = tile;
+        CurrentTile = tile;
+        InitCurrentTile?.Invoke(tile);
     }
 
     private Vector3 NormalizeYPosition(Vector3 position)
@@ -57,8 +61,8 @@ public class Wisp : MonoBehaviour
     private void ReachTile(GroundTile tile)
     {
 
-        DeactivateMechanismOnTile(_currentTile);
-        _currentTile = tile;
+        DeactivateMechanismOnTile(CurrentTile);
+        CurrentTile = tile;
         ActivateMechanismOnTile(tile);
     }
 

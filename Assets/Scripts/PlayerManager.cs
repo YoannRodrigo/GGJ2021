@@ -7,12 +7,13 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerManager : MonoBehaviour
 {
-    [SerializeField] private GroundTile currentTile;
+    [SerializeField] public GroundTile currentTile;
     [SerializeField] private GroundTile target;
     [SerializeField] private bool canMove;
     [SerializeField] private List<GroundTile> path;
     [SerializeField] private Wisp wisp;
     private Rigidbody thisRigidbody;
+    public event Action<GroundTile> InitCurrentTile;
     //Cards
     [Space]
     [Header("Cards")]
@@ -22,6 +23,7 @@ public class PlayerManager : MonoBehaviour
     {
         DeactivateSwitchOnTile();
         currentTile = target;
+        
     }
 
     public void InitPlayerTile(GroundTile tile)
@@ -29,6 +31,7 @@ public class PlayerManager : MonoBehaviour
         if (currentTile == null)
         {
             currentTile = tile;
+            InitCurrentTile?.Invoke(currentTile);
             if (wisp != null)
             {
                 wisp.SetPosition(tile);
@@ -48,7 +51,7 @@ public class PlayerManager : MonoBehaviour
 
     private void Update()
     {
-        ActivateSwitchOnTile();
+        //ActivateSwitchOnTile();
         MovePlayer();
     }
 
