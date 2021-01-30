@@ -32,4 +32,12 @@ public class Switch : Mechanism
             mechanism.DeactivateMechanism();
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            ActivateMechanism();
+        }
+    }
 }

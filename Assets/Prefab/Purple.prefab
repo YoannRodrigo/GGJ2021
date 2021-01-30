@@ -16,9 +16,9 @@ GameObject:
   - component: {fileID: 411601785374476910}
   - component: {fileID: 9014308970218773958}
   - component: {fileID: -972968693441142565}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Purple
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -131,6 +131,7 @@ MonoBehaviour:
   isEnlighten: 1
   isForceEnlighten: 1
   isSelected: 0
+  isForceDeactivate: 0
   haloToSelect: {fileID: 0}
   floorManager: {fileID: 0}
   mechanisms: []
@@ -4934,7 +4935,7 @@ GameObject:
   - component: {fileID: 6656313328244641130}
   - component: {fileID: 2735373610306635581}
   - component: {fileID: 8214502606324434641}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Purple
   m_TagString: Untagged
   m_Icon: {fileID: 0}
