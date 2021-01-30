@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using mechanism;
-using System;
 
 [RequireComponent(typeof(Renderer))]
 [RequireComponent(typeof(ParticleSystem))]
