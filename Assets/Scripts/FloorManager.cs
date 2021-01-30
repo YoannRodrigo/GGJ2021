@@ -11,7 +11,7 @@ public class FloorManager : MonoBehaviour
     [SerializeField] private List<GroundTile> path;
     private bool isTileSelected;
     [SerializeField] private GroundTile playerTile;
-    private int size = 15;
+    public int size {get;set;}
 
     public void SetPlayerTile(GroundTile playerTile)
     {
