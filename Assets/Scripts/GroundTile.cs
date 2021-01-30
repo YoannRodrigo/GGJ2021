@@ -16,7 +16,7 @@ public class GroundTile : MonoBehaviour
     [SerializeField] private int id;
     [SerializeField] private bool isActive;
     private Renderer thisRenderer;
-    private List<GameObject> listLight = new List<GameObject>();
+    [SerializeField] private List<GameObject> listLight = new List<GameObject>();
     private Camera mainCamera;
     private MaterialPropertyBlock propertyBlock;
     [SerializeField] private List<GroundTile> neighbors;
@@ -24,6 +24,7 @@ public class GroundTile : MonoBehaviour
     private Color baseColor;
     private bool baseColorSet;
     private bool isPlayerOnTile;
+    private bool isRemoving;
 
     public void SetFloorManager(FloorManager floorManager)
     {
@@ -78,32 +79,6 @@ public class GroundTile : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (!isForceDeactivate && CheckIfSelectedByMouse())
-        {
-                haloToSelect.Play();
-                if (Input.GetMouseButtonDown(0))
-                {
-                    if (floorManager.IsTileSelected() && floorManager.GetSelectedTile().GetInstanceID() != gameObject.GetInstanceID())
-                    {
-                        floorManager.UnSelectTile();
-                    }
-                    if (isSelected)
-                    {
-                        floorManager.ValidateTile();
-                    }
-                    else
-                    {
-                        isSelected = true;
-                        floorManager.TileSelect(this);
-                    }
-                }
-        }
-        else if(!isSelected || isPlayerOnTile)
-        {
-            haloToSelect.Clear();
-            haloToSelect.Stop();
-        }
-
         if (!isForceEnlighten)
         {
             UpdateRenderer();
@@ -120,15 +95,8 @@ public class GroundTile : MonoBehaviour
 
         if(isPlayerOnTile)
         {
-            UnSetPathPathColor();
+            SetDefaultColor();
         }
-    }
-
-    private bool CheckIfSelectedByMouse()
-    {
-        int layer_mask = LayerMask.GetMask("Floor");
-        Ray screenRay = mainCamera.ScreenPointToRay(Input.mousePosition);
-        return Physics.Raycast(screenRay, out RaycastHit resultHit, 100, layer_mask) && resultHit.collider.transform.GetInstanceID() == transform.GetInstanceID();
     }
 
     private void UpdateRenderer()
@@ -151,7 +119,7 @@ public class GroundTile : MonoBehaviour
                 }
                 thisRenderer.enabled = false;
                 isActive = false;
-                UnSetPathPathColor();
+                SetDefaultColor();
                 haloToSelect.Clear();
                 haloToSelect.Stop();
                 break;
@@ -160,15 +128,22 @@ public class GroundTile : MonoBehaviour
 
     private void UpdateListLight()
     {
-        foreach (GameObject light in listLight.Where(light => !light.activeSelf))
+        List<GameObject> LightToRemove = new List<GameObject>(listLight.Where(l => !l.activeSelf).ToList());
+        foreach (GameObject light in LightToRemove)
         {
-            listLight.Remove(light);
+            RemoveLight(light);
         }
-
         if (listLight.Count == 0)
         {
             isEnlighten = false;
         }
+    }
+
+    private void RemoveLight(GameObject light)
+    {
+        if(listLight.Contains(light))
+            listLight.Remove(light);
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -176,7 +151,6 @@ public class GroundTile : MonoBehaviour
         if (other.CompareTag("Light"))
         {
             listLight.Add(other.gameObject);
-            print("In");
             isEnlighten = true;
         }
 
@@ -191,8 +165,7 @@ public class GroundTile : MonoBehaviour
     {
         if (other.CompareTag("Light"))
         {
-            listLight.Remove(other.gameObject);
-            print("Out");
+            RemoveLight(other.gameObject);
         }
 
         if (other.CompareTag("Player"))
@@ -254,7 +227,7 @@ public class GroundTile : MonoBehaviour
         return neighbors.Where(n => n.IsActive()).ToList();
     }
 
-    public void SetIsPath()
+    public void SetPreSelectedColor()
     {
         if(!isPlayerOnTile)
         {
@@ -264,7 +237,7 @@ public class GroundTile : MonoBehaviour
         }
     }
 
-    public void UnSetPathPathColor()
+    public void SetDefaultColor()
     {
         thisRenderer.GetPropertyBlock(propertyBlock);
         propertyBlock.SetColor(COLOR, baseColor);
@@ -274,5 +247,17 @@ public class GroundTile : MonoBehaviour
     public void ForceEnlighten()
     {
         isForceEnlighten = true;
+    }
+
+    public void StopParticle()
+    {
+        haloToSelect.Clear();
+        haloToSelect.Stop();
+    }
+
+
+    public void PlayParticle()
+    {
+        haloToSelect.Play();
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
@@ -26,23 +24,39 @@ public class Wisp : MonoBehaviour
         .SetEase(Ease.InOutSine)
         .SetLoops(-1, LoopType.Yoyo);
     }
-    public void MoveToTile(GroundTile tile)
+    private void Update()
+    {
+        if (_currentTile)
+        {
+            Vector3 target = new Vector3(_currentTile.transform.position.x, transform.position.y, _currentTile.transform.position.z);
+            transform.DOMove(target, 1).SetEase(Ease.Linear);
+            if (Vector3.Distance(target, transform.position) < 0.01f)
+            {
+                _currentTile.SetDefaultColor();
+                _currentTile = null;
+            }
+        }
+    }
+
+    public void SetTargetTile(GroundTile targetTile)
+    {
+        _currentTile = targetTile;
+    }
+    
+    private void MoveToTile(GroundTile tile)
     {
         _path = _floorManager.GetBfs(_currentTile, tile);
-        if (_path != null)
+        _path.RemoveAt(0);
+        Sequence moveSequence = DOTween.Sequence();
+        foreach (GroundTile currentTile in _path)
         {
-            _path.RemoveAt(0);
-            Sequence moveSequence = DOTween.Sequence();
-            foreach (GroundTile currentTile in _path)
+            Vector3 normalizedYPosition = NormalizeYPosition(currentTile.transform.position);
+            moveSequence.Append(transform.DOMove(normalizedYPosition, .3f).SetEase(Ease.Linear).OnComplete(() =>
             {
-                Vector3 normalizedYPosition = NormalizeYPosition(currentTile.transform.position);
-                moveSequence.Append(transform.DOMove(normalizedYPosition, .3f).SetEase(Ease.Linear).OnComplete(() =>
-                {
-                    ReachTile(currentTile);
-                }));
-            }
-            moveSequence.Play();
+                ReachTile(currentTile);
+            }));
         }
+        moveSequence.Play();
     }
 
     public void SetPosition(GroundTile tile)

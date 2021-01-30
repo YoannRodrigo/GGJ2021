@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CardCollectible : MonoBehaviour
 {
@@ -10,6 +8,7 @@ public class CardCollectible : MonoBehaviour
     public Card.CardMajorType type;
     public Card.CardFamily family;
     public int value;
+    private bool isTaken;
 
     [Header("Game Feel")]
     public float maxHeight;
@@ -21,16 +20,23 @@ public class CardCollectible : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        switch(card.arcana){
-            case Card.CardArcana.MAJOR : 
-                MasterManager.Instance.cardsManager.AddCard(new MajorArcanaCard(cardName, card.arcana, type, card.sprite, card.description));
-            break;
-            case Card.CardArcana.MINOR : 
-                MasterManager.Instance.cardsManager.AddCard(new MinorArcanaCard(cardName, card.arcana, family, value, card.sprite, card.description));
-            break;
+        if(other.transform.CompareTag("Player"))
+        {
+            if (!isTaken)
+            {
+                isTaken = true;
+                switch (card.arcana)
+                {
+                    case Card.CardArcana.MAJOR:
+                        MasterManager.Instance.cardsManager.AddCard(new MajorArcanaCard(cardName, card.arcana, type, card.sprite, card.description));
+                        break;
+                    case Card.CardArcana.MINOR:
+                        MasterManager.Instance.cardsManager.AddCard(new MinorArcanaCard(cardName, card.arcana, family, value, card.sprite, card.description));
+                        break;
+                }
+            }
+            Destroy(gameObject);
         }
-
-        Destroy(gameObject);
         
     }
 }
