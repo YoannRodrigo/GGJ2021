@@ -11,16 +11,26 @@ namespace mechanism
         public override void ActivateMechanism()
         {
             base.ActivateMechanism();
-            if (_mechanisms != null && _mechanisms.Count > 0)
-            {
-                ActivateMechanisms();
-            }
+            ActivateMechanisms();
+        }
+
+        public override void DeactivateMechanism()
+        {
+            base.DeactivateMechanism();
+            DeactivateMechanisms();
         }
         private void ActivateMechanisms()
         {
             foreach (Mechanism mechanism in _mechanisms)
             {
                 mechanism.ActivateMechanism();
+            }
+        }
+        private void DeactivateMechanisms()
+        {
+            foreach (Mechanism mechanism in _mechanisms)
+            {
+                mechanism.DeactivateMechanism();
             }
         }
     }

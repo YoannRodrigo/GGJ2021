@@ -23,5 +23,8 @@ namespace mechanism
         {
             IsOn = true;
         }
+        public virtual void DeactivateMechanism(){
+            IsOn = false;
+        }
     }
 }

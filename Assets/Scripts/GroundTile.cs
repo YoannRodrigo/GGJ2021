@@ -142,4 +142,11 @@ public class GroundTile : MonoBehaviour
             mechanism.ActivateMechanism();
         }
     }
+    public void DeactivateSwitch()
+    {
+        foreach (Mechanism mechanism in mechanisms)
+        {
+            mechanism.DeactivateMechanism();
+        }
+    }
 }
