@@ -1,45 +1,51 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using objectPooler;
+﻿using UnityEngine;
 
-namespace mechanism
+public class MechanismLight : Mechanism
 {
-    public class MechanismLight : Mechanism
+
+    [SerializeField] private Light _light= default;
+    [SerializeField] private bool poolIsNeeded;
+    
+    private ObjectPooler _objectPooler;
+    private ObjectPoolItem _pooledLightItem = null;
+    
+
+    private void Start()
     {
+        _objectPooler = ObjectPooler.GetInstance();
+    }
 
-        [SerializeField] private Light _light = default;
-        private ObjectPooler _objectPooler;
-        private ObjectPoolItem _pooledLightItem = null;
-
-        private void Start()
+    public override void ActivateMechanism()
+    {
+        base.ActivateMechanism();
+        _light.gameObject.SetActive(true);
+        if(poolIsNeeded)
         {
-            _objectPooler = ObjectPooler.Instance;
-        }
-
-        public override void ActivateMechanism()
-        {
-            base.ActivateMechanism();
             if (_pooledLightItem == null)
             {
+                if (_objectPooler == null)
+                {
+                    Start();
+                }
+
                 _pooledLightItem = _objectPooler.GetPooledObjectByTag("Light");
                 _pooledLightItem.Object.transform.position = transform.position;
                 _pooledLightItem.Object.transform.parent = transform;
                 _light = _pooledLightItem.Object.GetComponent<Light>();
             }
-            _light.gameObject.SetActive(true);
         }
+    }
 
-        public override void DeactivateMechanism()
+    public override void DeactivateMechanism()
+    {
+        base.DeactivateMechanism();
+        if (_pooledLightItem == null || _pooledLightItem.Object == null)
         {
-            base.DeactivateMechanism();
-            if (_pooledLightItem == null || _pooledLightItem.Object == null)
-            {
-                return;
-            }
-            _pooledLightItem.ReturnItemToPool();
-            _pooledLightItem = null;
-
+            return;
         }
+
+        _pooledLightItem.ReturnItemToPool();
+        _pooledLightItem = null;
+
     }
 }

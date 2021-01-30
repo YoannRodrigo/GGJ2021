@@ -21,7 +21,7 @@ public class GroundTile : MonoBehaviour
     private Camera mainCamera;
     private MaterialPropertyBlock propertyBlock;
     [SerializeField] private List<GroundTile> neighbors;
-    private static readonly int COLOR = Shader.PropertyToID("_Color");
+    private static readonly int COLOR = Shader.PropertyToID("_BaseColor");
     private Color baseColor;
     private bool baseColorSet;
     private bool isPlayerOnTile;
