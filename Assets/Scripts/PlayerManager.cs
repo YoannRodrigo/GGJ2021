@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerManager : MonoBehaviour
@@ -76,5 +77,10 @@ public class PlayerManager : MonoBehaviour
     private void DeactivateSwitchOnTile()
     {
         currentTile.DeactivateSwitches();
+    }
+
+    public void Win()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
