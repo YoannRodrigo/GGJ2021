@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerManager : MonoBehaviour
@@ -20,6 +21,10 @@ public class PlayerManager : MonoBehaviour
     {
         this.path = new List<GroundTile>(path);
     }
+    //Cards
+    [Space]
+    [Header("Cards")]
+    public List<Card> playerCards = new List<Card>();
 
     private void Start()
     {
@@ -54,6 +59,9 @@ public class PlayerManager : MonoBehaviour
                 }
             }
         }
+
+
+
     }
     private void ActivateSwitchOnTile()
     {
@@ -62,5 +70,12 @@ public class PlayerManager : MonoBehaviour
     private void DeactivateSwitchOnTile()
     {
         currentTile.DeactivateSwitch();
+    }
+
+
+
+    public void SetTarget(Transform target)
+    {
+        this.target = target;
     }
 }
