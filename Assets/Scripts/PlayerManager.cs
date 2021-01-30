@@ -71,11 +71,11 @@ public class PlayerManager : MonoBehaviour
 
     private void ActivateSwitchOnTile()
     {
-        currentTile.ActivateSwitch();
+        currentTile.ActivateSwitches();
     }
 
     private void DeactivateSwitchOnTile()
     {
-        currentTile.DeactivateSwitch();
+        currentTile.DeactivateSwitches();
     }
 }

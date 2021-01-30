@@ -59,7 +59,7 @@ public class GroundTile : MonoBehaviour
     {
         return id;
     }
-    
+
     public void SetID(int x)
     {
         id = x;
@@ -73,7 +73,7 @@ public class GroundTile : MonoBehaviour
         mainCamera = Camera.main;
         propertyBlock = new MaterialPropertyBlock();
         thisRenderer.GetPropertyBlock(propertyBlock);
-        baseColor = new Color(propertyBlock.GetColor(COLOR).r,propertyBlock.GetColor(COLOR).g,propertyBlock.GetColor(COLOR).b,propertyBlock.GetColor(COLOR).a);
+        baseColor = new Color(propertyBlock.GetColor(COLOR).r, propertyBlock.GetColor(COLOR).g, propertyBlock.GetColor(COLOR).b, propertyBlock.GetColor(COLOR).a);
     }
 
     // Update is called once per frame
@@ -179,24 +179,30 @@ public class GroundTile : MonoBehaviour
     {
         isSelected = false;
     }
-    public void ActivateSwitch()
+    public void ActivateSwitches()
     {
         foreach (Mechanism mechanism in mechanisms)
         {
-            mechanism.ActivateMechanism();
+            if (mechanism is Switch)
+            {
+                mechanism.ActivateMechanism();
+            }
         }
     }
-    public void DeactivateSwitch()
+    public void DeactivateSwitches()
     {
         foreach (Mechanism mechanism in mechanisms)
         {
-            mechanism.DeactivateMechanism();
+            if (mechanism is Switch)
+            {
+                mechanism.DeactivateMechanism();
+            }
         }
     }
     public void FindNeighbors()
     {
-        foreach (GroundTile neighborToFind in possibleNeighborsPosition.Select(possibleNeighborPosition => 
-            floorManager.GetTileByPosition(possibleNeighborPosition+transform.position)).Where(neighborToFind => neighborToFind))
+        foreach (GroundTile neighborToFind in possibleNeighborsPosition.Select(possibleNeighborPosition =>
+            floorManager.GetTileByPosition(possibleNeighborPosition + transform.position)).Where(neighborToFind => neighborToFind))
         {
             neighbors.Add(neighborToFind);
         }
@@ -210,7 +216,7 @@ public class GroundTile : MonoBehaviour
     public void SetIsPath()
     {
         thisRenderer.GetPropertyBlock(propertyBlock);
-        propertyBlock.SetColor(COLOR, new Color(0,0.5f,0));
+        propertyBlock.SetColor(COLOR, new Color(0, 0.5f, 0));
         thisRenderer.SetPropertyBlock(propertyBlock);
     }
 
