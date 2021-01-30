@@ -2,11 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
-using objectPooler;
 using UnityEngine;
 
-namespace wisp
-{
     public class Wisp : MonoBehaviour
     {
         [SerializeField] private PlayerManager _player = default;
@@ -61,5 +58,4 @@ namespace wisp
         {
             tile.DeactivateMechanisms();
         }
-    }
 }
