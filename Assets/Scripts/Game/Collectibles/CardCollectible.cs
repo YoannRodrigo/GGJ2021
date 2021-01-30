@@ -5,20 +5,19 @@ using UnityEngine;
 public class CardCollectible : MonoBehaviour
 {
 
+    public Card card;
     public string cardName;
-    public Card.CardArcana arcana;
     public Card.CardMajorType type;
     public Card.CardFamily family;
     public int value;
-    public Sprite sprite;
 
     private void OnTriggerEnter(Collider other) {
-        switch(arcana){
+        switch(card.arcana){
             case Card.CardArcana.MAJOR : 
-                MasterManager.Instance.cardsManager.AddCard(new MajorArcanaCard(cardName, arcana, type, sprite));
+                MasterManager.Instance.cardsManager.AddCard(new MajorArcanaCard(cardName, card.arcana, type, card.sprite, card.description));
             break;
             case Card.CardArcana.MINOR : 
-                MasterManager.Instance.cardsManager.AddCard(new MinorArcanaCard(cardName, arcana, family, value, sprite));
+                MasterManager.Instance.cardsManager.AddCard(new MinorArcanaCard(cardName, card.arcana, family, value, card.sprite, card.description));
             break;
         }
 

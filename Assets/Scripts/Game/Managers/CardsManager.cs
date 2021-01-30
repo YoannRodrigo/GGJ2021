@@ -9,6 +9,8 @@ public class CardsManager : MonoBehaviour
     public UICardsController uICardsController;
     public int maxCards = 5;
 
+    
+
 
     // Start is called before the first frame update
     void Start()
