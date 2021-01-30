@@ -11,6 +11,9 @@ public class FloorManager : MonoBehaviour
     [SerializeField] private List<GroundTile> path;
     private bool isTileSelected;
     [SerializeField] private GroundTile playerTile;
+    private Camera mainCamera;
+    private GroundTile lastSelectedTile;
+    private bool isPlayerMoving;
     public int size {get;set;}
 
     public void SetPlayerTile(GroundTile playerTile)
@@ -34,7 +37,7 @@ public class FloorManager : MonoBehaviour
         return isTileSelected;
     }
 
-    public void TileSelect(GroundTile selectedTile)
+    private void TileSelect(GroundTile selectedTile)
     {
         isTileSelected = true;
         this.selectedTile = selectedTile;
@@ -51,13 +54,7 @@ public class FloorManager : MonoBehaviour
         path.Clear();
     }
 
-    public void UnSelectTile()
-    {
-        isTileSelected = false;
-        selectedTile.Unselect();
-    }
-
-    public void ValidateTile()
+    private void ValidateTile()
     {
         //playerManager.SetTarget(selectedTile);
         if(path.Count!=0)
@@ -85,8 +82,23 @@ public class FloorManager : MonoBehaviour
         return index >= 0 && index < grounds.Count ? grounds[index] : null;
     }
 
+    private void Start()
+    {
+        mainCamera = Camera.main;
+    }
+
     private void Update()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            isPlayerMoving = true;
+            ValidateTile();
+        }
+
+        if (path.Count == 0)
+        {
+            isPlayerMoving = false;
+        }
         foreach (GroundTile groundTile in path)
         {
             groundTile.SetIsPath();
@@ -115,7 +127,7 @@ public class FloorManager : MonoBehaviour
             crawl = pred[crawl.GetId()];
         }
 
-        if(path.Count <= size)
+        if(path.Count == size)
         {
             this.path = path;
         }
@@ -218,4 +230,61 @@ public class FloorManager : MonoBehaviour
         return null;
     }
 
+    public void ShowPath(int value)
+    {
+        if(!isPlayerMoving)
+        {
+            selectedTile = GetHighlightedGroundTile();
+            if (!lastSelectedTile)
+            {
+                lastSelectedTile = selectedTile;
+            }
+
+            if (selectedTile)
+            {
+                if (lastSelectedTile.GetInstanceID() != selectedTile.GetInstanceID())
+                {
+                    foreach (GroundTile groundTile in path)
+                    {
+                        groundTile.UnSetPathPathColor();
+                    }
+
+                    path.Clear();
+                    lastSelectedTile.StopParticle();
+                    selectedTile.PlayParticle();
+                    lastSelectedTile = selectedTile;
+                }
+
+                if (path.Count == 0)
+                {
+                    size = value;
+                    TileSelect(selectedTile);
+                }
+            }
+            else
+            {
+                if (lastSelectedTile)
+                {
+                    foreach (GroundTile groundTile in path)
+                    {
+                        groundTile.UnSetPathPathColor();
+                    }
+
+                    path.Clear();
+                    lastSelectedTile.StopParticle();
+                }
+            }
+        }
+    }
+
+    private GroundTile GetHighlightedGroundTile()
+    {
+        int layer_mask = LayerMask.GetMask("Floor");
+        Ray screenRay = mainCamera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(screenRay, out RaycastHit resultHit, 100, layer_mask))
+        {
+            return resultHit.collider.transform.GetComponent<GroundTile>();
+        }
+        return null;
+    }
 }

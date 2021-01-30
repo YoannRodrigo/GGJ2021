@@ -18,6 +18,7 @@ public class PlayerManager : MonoBehaviour
     [Header("Cards")]
     public List<Card> playerCards = new List<Card>();
 
+
     public void SetTarget(GroundTile target)
     {
         DeactivateSwitchOnTile();

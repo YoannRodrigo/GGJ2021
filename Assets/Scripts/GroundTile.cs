@@ -71,7 +71,6 @@ public class GroundTile : MonoBehaviour
     {
         thisRenderer = GetComponent<Renderer>();
         haloToSelect = GetComponent<ParticleSystem>();
-        mainCamera = Camera.main;
         propertyBlock = new MaterialPropertyBlock();
         baseColor = thisRenderer.material.color;
     }
@@ -79,32 +78,6 @@ public class GroundTile : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (!isForceDeactivate && CheckIfSelectedByMouse())
-        {
-                haloToSelect.Play();
-                if (Input.GetMouseButtonDown(0))
-                {
-                    if (floorManager.IsTileSelected() && floorManager.GetSelectedTile().GetInstanceID() != gameObject.GetInstanceID())
-                    {
-                        floorManager.UnSelectTile();
-                    }
-                    if (isSelected)
-                    {
-                        floorManager.ValidateTile();
-                    }
-                    else
-                    {
-                        isSelected = true;
-                        floorManager.TileSelect(this);
-                    }
-                }
-        }
-        else if(!isSelected || isPlayerOnTile)
-        {
-            haloToSelect.Clear();
-            haloToSelect.Stop();
-        }
-
         if (!isForceEnlighten)
         {
             UpdateRenderer();
@@ -123,13 +96,6 @@ public class GroundTile : MonoBehaviour
         {
             UnSetPathPathColor();
         }
-    }
-
-    private bool CheckIfSelectedByMouse()
-    {
-        int layer_mask = LayerMask.GetMask("Floor");
-        Ray screenRay = mainCamera.ScreenPointToRay(Input.mousePosition);
-        return Physics.Raycast(screenRay, out RaycastHit resultHit, 100, layer_mask) && resultHit.collider.transform.GetInstanceID() == transform.GetInstanceID();
     }
 
     private void UpdateRenderer()
@@ -275,5 +241,17 @@ public class GroundTile : MonoBehaviour
     public void ForceEnlighten()
     {
         isForceEnlighten = true;
+    }
+
+    public void StopParticle()
+    {
+        haloToSelect.Clear();
+        haloToSelect.Stop();
+    }
+
+
+    public void PlayParticle()
+    {
+        haloToSelect.Play();
     }
 }

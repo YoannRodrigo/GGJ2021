@@ -11,22 +11,23 @@ public class CardCollectible : MonoBehaviour
     private bool isTaken;
 
     private void OnTriggerEnter(Collider other) {
-        if(!isTaken)
+        if(other.transform.CompareTag("Player"))
         {
-            isTaken = true;
-            switch (card.arcana)
+            if (!isTaken)
             {
-                case Card.CardArcana.MAJOR:
-                    MasterManager.Instance.cardsManager.AddCard(new MajorArcanaCard(cardName, card.arcana, type, card.sprite, card.description));
-                    break;
-                case Card.CardArcana.MINOR:
-                    MasterManager.Instance.cardsManager.AddCard(new MinorArcanaCard(cardName, card.arcana, family, value, card.sprite, card.description));
-                    break;
+                isTaken = true;
+                switch (card.arcana)
+                {
+                    case Card.CardArcana.MAJOR:
+                        MasterManager.Instance.cardsManager.AddCard(new MajorArcanaCard(cardName, card.arcana, type, card.sprite, card.description));
+                        break;
+                    case Card.CardArcana.MINOR:
+                        MasterManager.Instance.cardsManager.AddCard(new MinorArcanaCard(cardName, card.arcana, family, value, card.sprite, card.description));
+                        break;
+                }
             }
+            Destroy(gameObject);
         }
-
-        print((gameObject.GetInstanceID()));
-        Destroy(gameObject);
         
     }
 }
