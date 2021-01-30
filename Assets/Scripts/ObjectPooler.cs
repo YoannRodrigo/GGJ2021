@@ -45,6 +45,10 @@ using System.Collections.Generic;
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
             }
+            else
+            {
+                DestroyImmediate(gameObject);
+            }
             pooledObjects = new List<ObjectPoolItem>();
             foreach (ObjectPool item in itemsToPool)
             {
@@ -139,5 +143,10 @@ using System.Collections.Generic;
                 }
             }
             return null;
+        }
+
+        public static ObjectPooler GetInstance()
+        {
+            return Instance;
         }
 }
