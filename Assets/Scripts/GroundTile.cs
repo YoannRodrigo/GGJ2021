@@ -12,19 +12,55 @@ public class GroundTile : MonoBehaviour
     [SerializeField] private bool isSelected;
     [SerializeField] private ParticleSystem haloToSelect;
     [SerializeField] private FloorManager floorManager;
-    private Tuple<int, int> id;
+    [SerializeField] private List<Vector3> possibleNeighborsPosition = new List<Vector3>();
+    [SerializeField] private int id;
+    [SerializeField] private bool isActive;
     private Renderer thisRenderer;
     private List<GameObject> listLight = new List<GameObject>();
     private Camera mainCamera;
+    private MaterialPropertyBlock propertyBlock;
+    [SerializeField] private List<GroundTile> neighbors;
+    private static readonly int COLOR = Shader.PropertyToID("_Color");
+    private Color baseColor;
 
     public void SetFloorManager(FloorManager floorManager)
     {
         this.floorManager = floorManager;
     }
-    
-    public void SetID(int x, int z)
+
+    private void OnDisable()
     {
-        id = new Tuple<int, int>(x, z);
+        isActive = false;
+    }
+
+    private void OnEnable()
+    {
+        isActive = true;
+    }
+
+    public void Deactivate()
+    {
+        isActive = false;
+    }
+
+    public void Activate()
+    {
+        isActive = true;
+    }
+
+    public bool IsActive()
+    {
+        return isActive;
+    }
+
+    public int GetId()
+    {
+        return id;
+    }
+    
+    public void SetID(int x)
+    {
+        id = x;
     }
     
     // Start is called before the first frame update
@@ -33,6 +69,9 @@ public class GroundTile : MonoBehaviour
         thisRenderer = GetComponent<Renderer>();
         haloToSelect = GetComponent<ParticleSystem>();
         mainCamera = Camera.main;
+        propertyBlock = new MaterialPropertyBlock();
+        thisRenderer.GetPropertyBlock(propertyBlock);
+        baseColor = new Color(propertyBlock.GetColor(COLOR).r,propertyBlock.GetColor(COLOR).g,propertyBlock.GetColor(COLOR).b,propertyBlock.GetColor(COLOR).a);
     }
 
     // Update is called once per frame
@@ -79,9 +118,6 @@ public class GroundTile : MonoBehaviour
             }
         }
         
-        
-        
-        
         if(!isForceEnlighten)
         {
             UpdateListLight();
@@ -118,6 +154,11 @@ public class GroundTile : MonoBehaviour
             print("In");
             isEnlighten = true;
         }
+
+        if (other.CompareTag("Player"))
+        {
+            floorManager.SetPlayerTile(this);
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -132,5 +173,33 @@ public class GroundTile : MonoBehaviour
     public void Unselect()
     {
         isSelected = false;
+    }
+    
+    public void FindNeighbors()
+    {
+        foreach (GroundTile neighborToFind in possibleNeighborsPosition.Select(possibleNeighborPosition => 
+            floorManager.GetTileByPosition(possibleNeighborPosition+transform.position)).Where(neighborToFind => neighborToFind))
+        {
+            neighbors.Add(neighborToFind);
+        }
+    }
+
+    public List<GroundTile> GetAllNeighbors()
+    {
+        return neighbors.Where(n => n.IsActive()).ToList();
+    }
+
+    public void SetIsPath()
+    {
+        thisRenderer.GetPropertyBlock(propertyBlock);
+        propertyBlock.SetColor(COLOR, new Color(0,0.5f,0));
+        thisRenderer.SetPropertyBlock(propertyBlock);
+    }
+
+    public void UnSetPathPathColor()
+    {
+        thisRenderer.GetPropertyBlock(propertyBlock);
+        propertyBlock.SetColor(COLOR, baseColor);
+        thisRenderer.SetPropertyBlock(propertyBlock);
     }
 }

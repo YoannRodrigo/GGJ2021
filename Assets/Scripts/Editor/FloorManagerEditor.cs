@@ -15,6 +15,11 @@ public class FloorManagerEditor : Editor
         {
             FindAllTile();
         }
+        
+        if (GUILayout.Button("Find Neighbors"))
+        {
+            floor.InitTiles();
+        }
         base.OnInspectorGUI();
     }
 
