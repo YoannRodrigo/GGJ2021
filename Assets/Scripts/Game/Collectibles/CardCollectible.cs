@@ -11,6 +11,15 @@ public class CardCollectible : MonoBehaviour
     public Card.CardFamily family;
     public int value;
 
+    [Header("Game Feel")]
+    public float maxHeight;
+    public float duration;
+
+    private void Start(){
+        GetComponent<SpriteRenderer>().sprite = card.sprite;
+        MasterManager.Instance.sequencer.SQ_UpDown(gameObject, maxHeight, duration);
+    }
+
     private void OnTriggerEnter(Collider other) {
         switch(card.arcana){
             case Card.CardArcana.MAJOR : 

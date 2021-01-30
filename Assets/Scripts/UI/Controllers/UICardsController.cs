@@ -16,6 +16,12 @@ public class UICardsController : MonoBehaviour
 
     public int currentHoveredCardID = -1;
 
+    [Header("Game feel")]
+    public float onMouseHoverHeight;
+    public float onMouseHoverDuration;
+    public float zoomedCardRotationRange;
+    public float zoomedCardRotationDuration;
+
 
     // Start is called before the first frame update
     void Start()
