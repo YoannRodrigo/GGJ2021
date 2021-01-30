@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
@@ -7,11 +8,12 @@ public class PlayerManager : MonoBehaviour
 {
     [SerializeField] private Transform target;
     [SerializeField] private bool canMove;
+    [SerializeField] private List<GroundTile> path;
     private Rigidbody thisRigidbody;
 
-    public void SetTarget(Transform target)
+    public void SetPath(List<GroundTile> path)
     {
-        this.target = target;
+        this.path = new List<GroundTile>(path);
     }
 
     private void Start()
@@ -27,14 +29,15 @@ public class PlayerManager : MonoBehaviour
             
         }
 
-        if (canMove)
+        if (path.Count!=0)
         {
-            Vector3 direction = (target.position - transform.position).normalized;
-            transform.DOMove(target.position, 1f).SetEase(Ease.Linear);
+            target = path[path.Count-1].transform;
             if (Vector3.Distance(target.position, transform.position) < 0.01f)
-            {
-                canMove = false;
+            {   
+                path.RemoveAt(path.Count-1);
             }
+            transform.DOMove(target.position, 0.2f).SetEase(Ease.Linear);
+            
         }
     }
 }
