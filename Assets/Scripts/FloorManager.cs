@@ -42,7 +42,7 @@ public class FloorManager : MonoBehaviour
         PrintShortestDistance(playerTile.GetAllNeighbors(), playerTile, selectedTile, grounds.Count,size);
     }
 
-    private void ResetPathColor()
+    public void ResetPathColor()
     {
         foreach (GroundTile groundTile in path)
         {

@@ -5,13 +5,14 @@ using UnityEngine;
 public class ResetLevelSystem : MonoBehaviour
 {
     [SerializeField] private Mechanism[] _mechanisms = default;
-    [SerializeField] private Mechanism[] _originalStateMechanism = default;
     [SerializeField] private PlayerManager _player = default;
     [SerializeField] private Wisp _wisp = default;
-    [SerializeField] private Vector3 _playerOriginalPosition = default;
-    [SerializeField] private Vector3 _wispOriginalPosition = default;
-    [SerializeField] private GroundTile _playerOriginalTile = default;
-    [SerializeField] private GroundTile _wispOriginalTile = default;
+    [SerializeField] private FloorManager _floorManager = default;
+    private Vector3 _playerOriginalPosition = default;
+    private Vector3 _wispOriginalPosition = default;
+    private GroundTile _playerOriginalTile = default;
+    private GroundTile _wispOriginalTile = default;
+
     public void GetAllMechanisms()
     {
         _mechanisms = Resources.FindObjectsOfTypeAll(typeof(Mechanism)) as Mechanism[];
@@ -27,7 +28,12 @@ public class ResetLevelSystem : MonoBehaviour
         _wisp.transform.position = _wispOriginalPosition;
         _player.currentTile = _playerOriginalTile;
         _wisp.CurrentTile = _wispOriginalTile;
+        _wisp._path.Clear();
+        _player.path.Clear();
+        _floorManager.UnSelectTile();
+        _floorManager.ResetPathColor();
     }
+
     private void Awake()
     {
         _playerOriginalPosition = _player.transform.position;
@@ -37,9 +43,11 @@ public class ResetLevelSystem : MonoBehaviour
         _player.InitCurrentTile += SetPlayerOriginalTile;
         _wisp.InitCurrentTile += SetWispOriginalTile;
     }
+
     private void SetPlayerOriginalTile(GroundTile tile){
         _playerOriginalTile = tile;
     }
+    
         private void SetWispOriginalTile(GroundTile tile){
         _wispOriginalTile = tile;
     }

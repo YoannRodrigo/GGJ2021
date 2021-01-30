@@ -10,7 +10,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] public GroundTile currentTile;
     [SerializeField] private GroundTile target;
     [SerializeField] private bool canMove;
-    [SerializeField] private List<GroundTile> path;
+    [SerializeField] public List<GroundTile> path;
     [SerializeField] private Wisp wisp;
     private Rigidbody thisRigidbody;
     public event Action<GroundTile> InitCurrentTile;
