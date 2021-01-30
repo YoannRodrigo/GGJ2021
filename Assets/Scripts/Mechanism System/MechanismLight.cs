@@ -3,23 +3,24 @@
 public class MechanismLight : Mechanism
 {
 
-    [SerializeField] private Light _light= default;
+    [SerializeField] private Light _light = default;
     [SerializeField] private bool poolIsNeeded;
-    
+
     private ObjectPooler _objectPooler;
     private ObjectPoolItem _pooledLightItem = null;
-    
 
-    private void Start()
+
+    public override void Start()
     {
+        base.Start();
         _objectPooler = ObjectPooler.GetInstance();
     }
 
     public override void ActivateMechanism()
     {
         base.ActivateMechanism();
-        _light.gameObject.SetActive(true);
-        if(poolIsNeeded)
+
+        if (poolIsNeeded)
         {
             if (_pooledLightItem == null)
             {
@@ -34,6 +35,7 @@ public class MechanismLight : Mechanism
                 _light = _pooledLightItem.Object.GetComponent<Light>();
             }
         }
+        _light.gameObject.SetActive(true);
     }
 
     public override void DeactivateMechanism()
