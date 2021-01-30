@@ -11,6 +11,7 @@ public class FloorManager : MonoBehaviour
     [SerializeField] private List<GroundTile> path;
     private bool isTileSelected;
     [SerializeField] private GroundTile playerTile;
+    private int size = 15;
 
     public void SetPlayerTile(GroundTile playerTile)
     {
@@ -38,7 +39,7 @@ public class FloorManager : MonoBehaviour
         isTileSelected = true;
         this.selectedTile = selectedTile;
         ResetPathColor();
-        PrintShortestDistance(playerTile.GetAllNeighbors(), playerTile, selectedTile, grounds.Count);
+        PrintShortestDistance(playerTile.GetAllNeighbors(), playerTile, selectedTile, grounds.Count,size);
     }
 
     private void ResetPathColor()
@@ -92,7 +93,7 @@ public class FloorManager : MonoBehaviour
         }
     }
     
-    private void PrintShortestDistance(List<GroundTile> adj, GroundTile start, GroundTile dest, int v)
+    private void PrintShortestDistance(List<GroundTile> adj, GroundTile start, GroundTile dest, int v, int size)
     {
         GroundTile[] pred = new GroundTile[v];
         int []dist = new int[v];
@@ -114,13 +115,11 @@ public class FloorManager : MonoBehaviour
             crawl = pred[crawl.GetId()];
         }
 
-        this.path = path;
-        
-        for (int i = path.Count - 1; 
-            i >= 0; i--) 
+        if(path.Count <= size)
         {
-            Console.Write(path[i] + " ");
+            this.path = path;
         }
+        
     }
     
     private bool Bfs(GroundTile start, GroundTile dest, int v, GroundTile[] previousTile, int []dist)
