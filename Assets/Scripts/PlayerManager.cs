@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using wisp;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerManager : MonoBehaviour
 {
-    [SerializeField] private GroundTile currentTile;
-    [SerializeField] private bool canMove;
-    [SerializeField] private List<GroundTile> path;
+    [SerializeField] private Wisp wisp;
+    private bool canMove;
+    private List<GroundTile> path = new List<GroundTile>();
     private Rigidbody thisRigidbody;
+    private GroundTile currentTile;
 
     internal GroundTile GetPosition()
     {
@@ -27,6 +29,7 @@ public class PlayerManager : MonoBehaviour
         if (currentTile == null)
         {
             currentTile = tile;
+            wisp.SetPosition(tile);
         }
     }
 

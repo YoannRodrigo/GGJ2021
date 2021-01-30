@@ -48,7 +48,6 @@ public class ObjectPooler : MonoBehaviour
         pooledObjects = new List<ObjectPoolItem>();
         foreach (ObjectPool item in itemsToPool)
         {
-            Debug.Log(item.ItemToPool.Object.name);
             GameObject parent = Instantiate(new GameObject());
             parent.name = "Pool of " + item.ItemToPool.Object.name;
             parent.transform.parent = gameObject.transform;
@@ -57,7 +56,7 @@ public class ObjectPooler : MonoBehaviour
                 GameObject obj = (GameObject)Instantiate(item.ItemToPool.Object);
                 obj.transform.parent = parent.transform;
                 obj.name = item.ItemToPool.Object.name;
-                ObjectPoolItem poolItem = new ObjectPoolItem(obj, this);
+                ObjectPoolItem poolItem = new ObjectPoolItem(obj, Instance);
                 pooledObjects.Add(poolItem);
                 obj.SetActive(false);
             }
@@ -82,7 +81,7 @@ public class ObjectPooler : MonoBehaviour
                 {
                     GameObject obj = (GameObject)Instantiate(item.ItemToPool.Object);
                     obj.SetActive(false);
-                    ObjectPoolItem poolItem = new ObjectPoolItem(obj, this);
+                    ObjectPoolItem poolItem = new ObjectPoolItem(obj, Instance);
                     pooledObjects.Add(poolItem);
                     poolItem.IsInUse = true;
                     return poolItem;
@@ -108,7 +107,7 @@ public class ObjectPooler : MonoBehaviour
                 if (item.ShouldExpand)
                 {
                     GameObject obj = (GameObject)Instantiate(item.ItemToPool.Object);
-                    ObjectPoolItem poolItem = new ObjectPoolItem(obj, this);
+                    ObjectPoolItem poolItem = new ObjectPoolItem(obj, Instance);
                     obj.SetActive(false);
                     pooledObjects.Add(poolItem);
                     poolItem.IsInUse = true;
@@ -132,7 +131,7 @@ public class ObjectPooler : MonoBehaviour
     }
     private Transform FindParentInPool(string name)
     {
-        foreach (GameObject poolParent in transform)
+        foreach (Transform poolParent in transform)
         {
             if (poolParent.name == "Pool of " + name)
             {
