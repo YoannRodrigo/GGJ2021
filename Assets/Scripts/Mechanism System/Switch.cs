@@ -1,37 +1,35 @@
 ﻿
 using System.Collections.Generic;
 using UnityEngine;
-namespace mechanism
+
+public class Switch : Mechanism
 {
-    public class Switch : Mechanism
+
+    [SerializeField] private List<Mechanism> _mechanisms = default;
+
+    public override void ActivateMechanism()
     {
+        base.ActivateMechanism();
+        ActivateMechanisms();
+    }
 
-        [SerializeField] private List<Mechanism> _mechanisms = default;
-
-        public override void ActivateMechanism()
+    public override void DeactivateMechanism()
+    {
+        base.DeactivateMechanism();
+        DeactivateMechanisms();
+    }
+    private void ActivateMechanisms()
+    {
+        foreach (Mechanism mechanism in _mechanisms)
         {
-            base.ActivateMechanism();
-            ActivateMechanisms();
+            mechanism.ActivateMechanism();
         }
-
-        public override void DeactivateMechanism()
+    }
+    private void DeactivateMechanisms()
+    {
+        foreach (Mechanism mechanism in _mechanisms)
         {
-            base.DeactivateMechanism();
-            DeactivateMechanisms();
-        }
-        private void ActivateMechanisms()
-        {
-            foreach (Mechanism mechanism in _mechanisms)
-            {
-                mechanism.ActivateMechanism();
-            }
-        }
-        private void DeactivateMechanisms()
-        {
-            foreach (Mechanism mechanism in _mechanisms)
-            {
-                mechanism.DeactivateMechanism();
-            }
+            mechanism.DeactivateMechanism();
         }
     }
 }

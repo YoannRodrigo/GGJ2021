@@ -7,9 +7,14 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     [SerializeField] private GroundTile currentTile;
+    [SerializeField] private GroundTile target;
     [SerializeField] private bool canMove;
     [SerializeField] private List<GroundTile> path;
     private Rigidbody thisRigidbody;
+    //Cards
+    [Space]
+    [Header("Cards")]
+    public List<Card> playerCards = new List<Card>();
 
     public void SetTarget(GroundTile target)
     {
@@ -29,10 +34,6 @@ public class PlayerManager : MonoBehaviour
     {
         this.path = new List<GroundTile>(path);
     }
-    //Cards
-    [Space]
-    [Header("Cards")]
-    public List<Card> playerCards = new List<Card>();
 
     private void Start()
     {
@@ -41,31 +42,21 @@ public class PlayerManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && currentTile)
+        ActivateSwitchOnTile();
+        MovePlayer();
+    }
+
+    private void MovePlayer()
+    {
+        if (path.Count != 0)
         {
-            canMove = true;
-        }
-        if (canMove)
-        {
-            Transform target = currentTile.transform;
-            Vector3 direction = (target.position - transform.position).normalized;
-            transform.DOMove(target.position, 1f).SetEase(Ease.Linear);
-            if (Vector3.Distance(target.position, transform.position) < 0.01f)
+            target = path[path.Count - 1];
+            if (Vector3.Distance(target.transform.position, transform.position) < 0.01f)
             {
-                ActivateSwitchOnTile();
-                canMove = false;
-
-                if (path.Count != 0)
-                {
-                    target = path[path.Count - 1].transform;
-                    if (Vector3.Distance(target.position, transform.position) < 0.01f)
-                    {
-                        path.RemoveAt(path.Count - 1);
-                    }
-                    transform.DOMove(target.position, 0.2f).SetEase(Ease.Linear);
-
-                }
+                currentTile = target;
+                path.RemoveAt(path.Count - 1);
             }
+            transform.DOMove(target.transform.position, 0.2f).SetEase(Ease.Linear);
         }
     }
 

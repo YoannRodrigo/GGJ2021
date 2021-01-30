@@ -58,7 +58,7 @@ public class FloorManager : MonoBehaviour
 
     public void ValidateTile()
     {
-        playerManager.SetTarget(selectedTile);
+        //playerManager.SetTarget(selectedTile);
         if(path.Count!=0)
         {
             playerManager.SetPath(path);

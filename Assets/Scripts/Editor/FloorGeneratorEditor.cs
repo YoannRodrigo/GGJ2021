@@ -18,9 +18,9 @@ public class FloorGeneratorEditor : Editor
         
         if (GUILayout.Button("Destroy Floor"))
         {
-            foreach (Transform componentsInChild in floor.GetComponentsInChildren<Transform>())
+            foreach (GroundTile componentsInChild in floor.GetComponentsInChildren<GroundTile>())
             {
-                if(!componentsInChild.GetComponent<FloorGenerator>())
+                if(componentsInChild.GetComponent<GroundTile>())
                 {
                     DestroyImmediate(componentsInChild.gameObject);
                 }

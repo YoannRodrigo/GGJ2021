@@ -1,30 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace mechanism
+public class Mechanism : MonoBehaviour
 {
-    public class Mechanism : MonoBehaviour
+    [SerializeField] private bool isOn = default;
+    public bool IsOn
     {
-        [SerializeField] private bool _isOn = default;
-        public bool IsOn
+        get
         {
-            get
-            {
-                return _isOn;
-            }
-            set
-            {
-                _isOn = value;
-            }
+            return isOn;
         }
+        set
+        {
+            isOn = value;
+        }
+    }
 
-        public virtual void ActivateMechanism()
-        {
-            IsOn = true;
-        }
-        public virtual void DeactivateMechanism(){
-            IsOn = false;
-        }
+    public virtual void ActivateMechanism()
+    {
+        IsOn = true;
+    }
+    public virtual void DeactivateMechanism(){
+        IsOn = false;
     }
 }
