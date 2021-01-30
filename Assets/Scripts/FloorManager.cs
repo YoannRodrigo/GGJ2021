@@ -138,6 +138,11 @@ public class FloorManager : MonoBehaviour
             wisp.SetTargetTile(tile);
         }
     }
+    public void UnselectTile(){
+        isTileSelected = false;
+        selectedTile.StopParticle();
+        selectedTile = null;
+    }
 
     private void PrintShortestDistance(List<GroundTile> adj, GroundTile start, GroundTile dest, int v, int size)
     {

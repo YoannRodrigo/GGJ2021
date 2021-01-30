@@ -30,7 +30,7 @@ public class ResetLevelSystem : MonoBehaviour
         _wisp.CurrentTile = _wispOriginalTile;
         _wisp._path.Clear();
         _player.path.Clear();
-        _floorManager.UnSelectTile();
+        _floorManager.UnselectTile();
         _floorManager.ResetPathColor();
     }
 
@@ -47,7 +47,7 @@ public class ResetLevelSystem : MonoBehaviour
     private void SetPlayerOriginalTile(GroundTile tile){
         _playerOriginalTile = tile;
     }
-    
+
         private void SetWispOriginalTile(GroundTile tile){
         _wispOriginalTile = tile;
     }
