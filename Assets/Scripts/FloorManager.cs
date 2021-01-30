@@ -159,4 +159,10 @@ public class FloorManager : MonoBehaviour
         }
         return false;
     }
+
+    public void ResetList()
+    {
+        grounds.Clear();
+        tilesPosition.Clear();
+    }
 }

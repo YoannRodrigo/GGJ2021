@@ -11,6 +11,11 @@ public class FloorManagerEditor : Editor
     {
         floor = (FloorManager) target;
         EditorGUI.BeginChangeCheck();
+        if (GUILayout.Button("Reset Lists"))
+        {
+            floor.ResetList();
+        }
+        
         if (GUILayout.Button("Find All Tiles"))
         {
             FindAllTile();
