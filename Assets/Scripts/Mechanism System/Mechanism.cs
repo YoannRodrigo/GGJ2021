@@ -14,6 +14,27 @@ public class Mechanism : MonoBehaviour
             isOn = value;
         }
     }
+    private bool _originalState = default;
+
+    private void Awake(){
+        _originalState = isOn;
+    }
+    public virtual void Start(){
+        if(IsOn){
+            ActivateMechanism();
+        }
+        else{
+            DeactivateMechanism();
+        }
+    }
+    public void Reset(){
+        isOn = _originalState;
+        if(isOn){
+            ActivateMechanism();
+            return;
+        } 
+        DeactivateMechanism();
+    }
 
     public virtual void ActivateMechanism()
     {

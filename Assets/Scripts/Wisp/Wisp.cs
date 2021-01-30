@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
@@ -8,9 +9,12 @@ public class Wisp : MonoBehaviour
     [SerializeField] private FloorManager _floorManager = default;
     [SerializeField] private GroundTile _currentTile = default;
     [SerializeField] private ObjectPooler _objectPooler;
-    [SerializeField] List<GroundTile> _path = new List<GroundTile>();
+    [SerializeField] public List<GroundTile> _path = new List<GroundTile>();
     private float _floatYDistance = .3f;
     private float _floatDuration = 1f; //in seconds
+
+    public GroundTile CurrentTile { get => _currentTile; set => _currentTile = value; }
+        public event Action<GroundTile> InitCurrentTile;
 
     private void Start()
     {
@@ -61,7 +65,8 @@ public class Wisp : MonoBehaviour
 
     public void SetPosition(GroundTile tile)
     {
-        _currentTile = tile;
+        CurrentTile = tile;
+        InitCurrentTile?.Invoke(tile);
     }
 
     private Vector3 NormalizeYPosition(Vector3 position)
@@ -71,8 +76,8 @@ public class Wisp : MonoBehaviour
     private void ReachTile(GroundTile tile)
     {
 
-        DeactivateMechanismOnTile(_currentTile);
-        _currentTile = tile;
+        DeactivateMechanismOnTile(CurrentTile);
+        CurrentTile = tile;
         ActivateMechanismOnTile(tile);
     }
 

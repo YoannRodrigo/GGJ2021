@@ -52,7 +52,8 @@ using System.Collections.Generic;
             pooledObjects = new List<ObjectPoolItem>();
             foreach (ObjectPool item in itemsToPool)
             {
-                GameObject parent = Instantiate(new GameObject());
+                Debug.Log("instantiate");
+                GameObject parent = Instantiate(new GameObject("CHIBRE"));
                 parent.name = "Pool of " + item.ItemToPool.Object.name;
                 parent.transform.parent = gameObject.transform;
                 for (int i = 0; i < item.AmountToPool; i++)
