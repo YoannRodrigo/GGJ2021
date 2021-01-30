@@ -94,7 +94,7 @@ public class GroundTile : MonoBehaviour
 
         if(isPlayerOnTile)
         {
-            UnSetPathPathColor();
+            SetDefaultColor();
         }
     }
 
@@ -118,7 +118,7 @@ public class GroundTile : MonoBehaviour
                 }
                 thisRenderer.enabled = false;
                 isActive = false;
-                UnSetPathPathColor();
+                SetDefaultColor();
                 haloToSelect.Clear();
                 haloToSelect.Stop();
                 break;
@@ -221,7 +221,7 @@ public class GroundTile : MonoBehaviour
         return neighbors.Where(n => n.IsActive()).ToList();
     }
 
-    public void SetIsPath()
+    public void SetPreSelectedColor()
     {
         if(!isPlayerOnTile)
         {
@@ -231,7 +231,7 @@ public class GroundTile : MonoBehaviour
         }
     }
 
-    public void UnSetPathPathColor()
+    public void SetDefaultColor()
     {
         thisRenderer.GetPropertyBlock(propertyBlock);
         propertyBlock.SetColor(COLOR, baseColor);

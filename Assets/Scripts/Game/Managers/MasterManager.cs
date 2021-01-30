@@ -37,9 +37,10 @@ public class MasterManager : MonoBehaviour
                 case Card.CardFamily.NONE:
                     break;
                 case Card.CardFamily.WISPS:
+                    floorManager.ShowWispChoices(minorArcanaCard.value);
                     break;
                 case Card.CardFamily.DICE:
-                    floorManager.ShowPath(minorArcanaCard.value + 1);
+                    floorManager.ShowPlayerPath(minorArcanaCard.value + 1);
                     break;
                 case Card.CardFamily.TBD2:
                     break;

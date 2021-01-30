@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class FloorManager : MonoBehaviour
@@ -14,6 +15,7 @@ public class FloorManager : MonoBehaviour
     private Camera mainCamera;
     private GroundTile lastSelectedTile;
     private bool isPlayerMoving;
+    [SerializeField] private List<GroundTile> wispGroundTile = new List<GroundTile>();
     public int size {get;set;}
 
     public void SetPlayerTile(GroundTile playerTile)
@@ -49,25 +51,18 @@ public class FloorManager : MonoBehaviour
     {
         foreach (GroundTile groundTile in path)
         {
-            groundTile.UnSetPathPathColor();
+            groundTile.SetDefaultColor();
         }
         path.Clear();
     }
 
-    private void ValidateTile()
+    private void ValidatePath()
     {
-        //playerManager.SetTarget(selectedTile);
         if(path.Count!=0)
         {
             playerManager.SetPath(path);
         }
     }
-
-    public GameObject GetSelectedTile()
-    {
-        return selectedTile.gameObject;
-    }
-
     public void InitTiles()
     {
         foreach (GroundTile tile in grounds)
@@ -91,8 +86,15 @@ public class FloorManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            isPlayerMoving = true;
-            ValidateTile();
+            if(path.Count!=0)
+            {
+                isPlayerMoving = true;
+                ValidatePath();
+            }
+            else if (wispGroundTile.Count != 0)
+            {
+                ValidateWispTarget();
+            }
         }
 
         if (path.Count == 0)
@@ -101,10 +103,15 @@ public class FloorManager : MonoBehaviour
         }
         foreach (GroundTile groundTile in path)
         {
-            groundTile.SetIsPath();
+            groundTile.SetPreSelectedColor();
         }
     }
-    
+
+    private void ValidateWispTarget()
+    {
+        playerManager.GetWisp().SetTargetTile(selectedTile);
+    }
+
     private void PrintShortestDistance(List<GroundTile> adj, GroundTile start, GroundTile dest, int v, int size)
     {
         GroundTile[] pred = new GroundTile[v];
@@ -230,8 +237,9 @@ public class FloorManager : MonoBehaviour
         return null;
     }
 
-    public void ShowPath(int value)
+    public void ShowPlayerPath(int value)
     {
+        ClearWispChoice();
         if(!isPlayerMoving)
         {
             selectedTile = GetHighlightedGroundTile();
@@ -244,12 +252,7 @@ public class FloorManager : MonoBehaviour
             {
                 if (lastSelectedTile.GetInstanceID() != selectedTile.GetInstanceID())
                 {
-                    foreach (GroundTile groundTile in path)
-                    {
-                        groundTile.UnSetPathPathColor();
-                    }
-
-                    path.Clear();
+                    ClearPath();
                     lastSelectedTile.StopParticle();
                     selectedTile.PlayParticle();
                     lastSelectedTile = selectedTile;
@@ -265,18 +268,67 @@ public class FloorManager : MonoBehaviour
             {
                 if (lastSelectedTile)
                 {
-                    foreach (GroundTile groundTile in path)
-                    {
-                        groundTile.UnSetPathPathColor();
-                    }
-
-                    path.Clear();
+                    ClearPath();
                     lastSelectedTile.StopParticle();
                 }
             }
         }
     }
 
+    public void ShowWispChoices(int value)
+    {
+        ClearPath();
+        List<Vector3> targetPosition = new List<Vector3>()
+        {
+            playerManager.transform.position + new Vector3(0, 0, value),
+            playerManager.transform.position + new Vector3(value, 0, 0),
+            playerManager.transform.position + new Vector3(0, 0, -value),
+            playerManager.transform.position + new Vector3(-value, 0, 0),
+        };
+
+        foreach (GroundTile groundTile in targetPosition.Select(GetTileByPosition).Where(groundTile => groundTile))
+        {
+            wispGroundTile.Add(groundTile);
+            groundTile.SetPreSelectedColor();
+        }
+
+        selectedTile = GetHighlightedGroundTile();
+        if (!lastSelectedTile)
+        {
+            lastSelectedTile = selectedTile;
+        }
+        if (selectedTile && wispGroundTile.Contains(selectedTile))
+        {
+            if (lastSelectedTile.GetId() != selectedTile.GetId())
+            {
+                lastSelectedTile.StopParticle();
+                selectedTile.PlayParticle();
+            }
+        }
+        else
+        {
+            lastSelectedTile.StopParticle();
+        }
+    }
+
+    private void ClearPath()
+    {
+        foreach (GroundTile groundTile in path)
+        {
+            groundTile.SetDefaultColor();
+        }
+        path.Clear();
+    }
+
+    private void ClearWispChoice()
+    {
+        foreach (GroundTile groundTile in wispGroundTile)
+        {
+            groundTile.SetDefaultColor();
+        }
+        wispGroundTile.Clear();
+    }
+    
     private GroundTile GetHighlightedGroundTile()
     {
         int layer_mask = LayerMask.GetMask("Floor");

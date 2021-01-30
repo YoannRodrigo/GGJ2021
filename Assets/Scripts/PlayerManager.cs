@@ -30,10 +30,6 @@ public class PlayerManager : MonoBehaviour
         if (currentTile == null)
         {
             currentTile = tile;
-            if (wisp != null)
-            {
-                wisp.SetPosition(tile);
-            }
         }
     }
 
@@ -88,5 +84,10 @@ public class PlayerManager : MonoBehaviour
     public void Win()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public Wisp GetWisp()
+    {
+        return wisp;
     }
 }

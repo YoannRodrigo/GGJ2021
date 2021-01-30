@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-    public class Wisp : MonoBehaviour
+public class Wisp : MonoBehaviour
     {
         [SerializeField] private PlayerManager _player = default;
         [SerializeField] private FloorManager _floorManager = default;
@@ -12,12 +11,31 @@ using UnityEngine;
         [SerializeField] private ObjectPooler _objectPooler;
         [SerializeField] List<GroundTile> _path = new List<GroundTile>();
 
+        
+        
         private void Start()
         {
             _objectPooler = ObjectPooler.Instance;
         }
 
-        public void MoveToTile(GroundTile tile)
+        private void Update()
+        {
+            if (!_currentTile)
+            {
+                transform.position = new Vector3(_player.transform.position.x, transform.position.y,_player.transform.position.z);
+            }
+            else
+            {
+                transform.DOMove(new Vector3(_currentTile.transform.position.x, transform.position.y, _currentTile.transform.position.z), 1).SetEase(Ease.Linear);
+            }
+        }
+
+        public void SetTargetTile(GroundTile targetTile)
+        {
+            _currentTile = targetTile;
+        }
+        
+        private void MoveToTile(GroundTile tile)
         {
             _path = _floorManager.GetBfs(_currentTile, tile);
             _path.RemoveAt(0);
