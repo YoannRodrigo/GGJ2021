@@ -11,6 +11,11 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private List<GroundTile> path;
     private Rigidbody thisRigidbody;
 
+    internal GroundTile GetPosition()
+    {
+        return currentTile;
+    }
+
     public void SetTarget(GroundTile target)
     {
         DeactivateSwitchOnTile();
