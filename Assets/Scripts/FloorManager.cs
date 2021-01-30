@@ -10,12 +10,15 @@ public class FloorManager : MonoBehaviour
     [SerializeField] private GroundTile selectedTile;
     [SerializeField] private List<Vector3> tilesPosition = new List<Vector3>();
     [SerializeField] private List<GroundTile> path;
+    [SerializeField] private Wisp wisp;
     private bool isTileSelected;
     [SerializeField] private GroundTile playerTile;
     private Camera mainCamera;
     private GroundTile lastSelectedTile;
     private bool isPlayerMoving;
     [SerializeField] private List<GroundTile> wispGroundTile = new List<GroundTile>();
+    private bool isWispMoving;
+    private GroundTile wispTile;
     public int size {get;set;}
 
     public void SetPlayerTile(GroundTile playerTile)
@@ -56,7 +59,7 @@ public class FloorManager : MonoBehaviour
         path.Clear();
     }
 
-    private void ValidatePath()
+    private void ValidatePath(List<GroundTile> path)
     {
         if(path.Count!=0)
         {
@@ -88,15 +91,34 @@ public class FloorManager : MonoBehaviour
         {
             if(path.Count!=0)
             {
-                isPlayerMoving = true;
-                ValidatePath();
+                if(!isPlayerMoving)
+                {
+                    isPlayerMoving = true;
+                    ValidatePath(path);
+                }
             }
             else if (wispGroundTile.Count != 0)
             {
-                ValidateWispTarget();
+                if(!isWispMoving)
+                {
+                    isWispMoving = true;
+                    foreach (GroundTile groundTile in wispGroundTile)
+                    {
+                        groundTile.SetDefaultColor();
+                    }
+
+                    ValidateWispTarget(selectedTile);
+                }
             }
         }
 
+        if (wispTile && Vector3.Distance(Vector3.Scale(wisp.transform.position, new Vector3(1, 0, 1)), wispTile.transform.position) < 0.01f)
+        {
+            wispTile.StopParticle();
+            isWispMoving = false;
+            wispGroundTile.Clear();
+        }
+        
         if (path.Count == 0)
         {
             isPlayerMoving = false;
@@ -107,9 +129,14 @@ public class FloorManager : MonoBehaviour
         }
     }
 
-    private void ValidateWispTarget()
+    private void ValidateWispTarget(GroundTile tile)
     {
-        playerManager.GetWisp().SetTargetTile(selectedTile);
+        if(tile)
+        {
+            wispTile = tile;
+            tile.StopParticle();
+            wisp.SetTargetTile(tile);
+        }
     }
 
     private void PrintShortestDistance(List<GroundTile> adj, GroundTile start, GroundTile dest, int v, int size)
@@ -278,36 +305,52 @@ public class FloorManager : MonoBehaviour
     public void ShowWispChoices(int value)
     {
         ClearPath();
-        List<Vector3> targetPosition = new List<Vector3>()
+        if(!isWispMoving)
         {
-            playerManager.transform.position + new Vector3(0, 0, value),
-            playerManager.transform.position + new Vector3(value, 0, 0),
-            playerManager.transform.position + new Vector3(0, 0, -value),
-            playerManager.transform.position + new Vector3(-value, 0, 0),
-        };
+            Vector3 wispOnGroundPos = Vector3.Scale(wisp.transform.position, new Vector3(1, 0, 1));
+            List<Vector3> targetPosition = new List<Vector3>()
+            {
+                wispOnGroundPos + new Vector3(0, 0, value),
+                wispOnGroundPos + new Vector3(value, 0, 0),
+                wispOnGroundPos + new Vector3(0, 0, -value),
+                wispOnGroundPos + new Vector3(-value, 0, 0),
+            };
+            GroundTile tile = GetHighlightedGroundTile();
+            
+            foreach (GroundTile groundTile in targetPosition.Select(GetTileByPosition).Where(groundTile => groundTile))
+            {
+                if (!wispGroundTile.Contains(groundTile))
+                {
+                    wispGroundTile.Add(groundTile);
+                    groundTile.SetPreSelectedColor();
+                }
+            }
 
-        foreach (GroundTile groundTile in targetPosition.Select(GetTileByPosition).Where(groundTile => groundTile))
-        {
-            wispGroundTile.Add(groundTile);
-            groundTile.SetPreSelectedColor();
-        }
-
-        selectedTile = GetHighlightedGroundTile();
-        if (!lastSelectedTile)
-        {
-            lastSelectedTile = selectedTile;
-        }
-        if (selectedTile && wispGroundTile.Contains(selectedTile))
-        {
-            if (lastSelectedTile.GetId() != selectedTile.GetId())
+            if (wispGroundTile.Contains(tile))
+            {
+                selectedTile = tile;
+            }
+            else
+            {
+                selectedTile = null;
+            }
+            
+            if (selectedTile && wispGroundTile.Contains(selectedTile))
+            {
+                if (!lastSelectedTile)
+                {
+                    lastSelectedTile = selectedTile;
+                }
+                if (lastSelectedTile.GetId() != selectedTile.GetId())
+                {
+                    lastSelectedTile.StopParticle();
+                    selectedTile.PlayParticle();
+                }
+            }
+            else
             {
                 lastSelectedTile.StopParticle();
-                selectedTile.PlayParticle();
             }
-        }
-        else
-        {
-            lastSelectedTile.StopParticle();
         }
     }
 

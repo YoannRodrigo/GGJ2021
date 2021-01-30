@@ -7,6 +7,7 @@ TagManager:
   - Light
   - Floor
   - Collectible
+  - Wisp
   layers:
   - Default
   - TransparentFX

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
@@ -20,13 +19,15 @@ public class Wisp : MonoBehaviour
 
         private void Update()
         {
-            if (!_currentTile)
+            if (_currentTile)
             {
-                transform.position = new Vector3(_player.transform.position.x, transform.position.y,_player.transform.position.z);
-            }
-            else
-            {
-                transform.DOMove(new Vector3(_currentTile.transform.position.x, transform.position.y, _currentTile.transform.position.z), 1).SetEase(Ease.Linear);
+                Vector3 target = new Vector3(_currentTile.transform.position.x, transform.position.y, _currentTile.transform.position.z);
+                transform.DOMove(target, 1).SetEase(Ease.Linear);
+                if (Vector3.Distance(target, transform.position) < 0.01f)
+                {
+                    _currentTile.SetDefaultColor();
+                    _currentTile = null;
+                }
             }
         }
 

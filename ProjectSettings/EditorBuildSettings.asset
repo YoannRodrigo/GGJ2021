@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Tuto1.unity
     guid: 40ae44df6326b0d4d9281d52389cacb4
   - enabled: 1
-    path: Assets/Scenes/CyrilDev.unity
-    guid: 05b7d5ce6cf4bab4a955122c2a56cb5a
+    path: Assets/Scenes/Tuto2.unity
+    guid: da4956da7d4c42c4195202ad17b58bba
   m_configObjects: {}

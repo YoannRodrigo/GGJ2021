@@ -17,7 +17,7 @@ public class GroundTile : MonoBehaviour
     [SerializeField] private int id;
     [SerializeField] private bool isActive;
     private Renderer thisRenderer;
-    private List<GameObject> listLight = new List<GameObject>();
+    [SerializeField] private List<GameObject> listLight = new List<GameObject>();
     private Camera mainCamera;
     private MaterialPropertyBlock propertyBlock;
     [SerializeField] private List<GroundTile> neighbors;
@@ -25,6 +25,7 @@ public class GroundTile : MonoBehaviour
     private Color baseColor;
     private bool baseColorSet;
     private bool isPlayerOnTile;
+    private bool isRemoving;
 
     public void SetFloorManager(FloorManager floorManager)
     {
@@ -127,15 +128,22 @@ public class GroundTile : MonoBehaviour
 
     private void UpdateListLight()
     {
-        foreach (GameObject light in listLight.Where(light => !light.activeSelf))
+        List<GameObject> LightToRemove = new List<GameObject>(listLight.Where(l => !l.activeSelf).ToList());
+        foreach (GameObject light in LightToRemove)
         {
-            listLight.Remove(light);
+            RemoveLight(light);
         }
-
         if (listLight.Count == 0)
         {
             isEnlighten = false;
         }
+    }
+
+    private void RemoveLight(GameObject light)
+    {
+        if(listLight.Contains(light))
+            listLight.Remove(light);
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -143,7 +151,6 @@ public class GroundTile : MonoBehaviour
         if (other.CompareTag("Light"))
         {
             listLight.Add(other.gameObject);
-            print("In");
             isEnlighten = true;
         }
 
@@ -158,8 +165,7 @@ public class GroundTile : MonoBehaviour
     {
         if (other.CompareTag("Light"))
         {
-            listLight.Remove(other.gameObject);
-            print("Out");
+            RemoveLight(other.gameObject);
         }
 
         if (other.CompareTag("Player"))
