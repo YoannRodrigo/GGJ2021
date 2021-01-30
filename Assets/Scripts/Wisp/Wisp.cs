@@ -13,26 +13,38 @@ namespace wisp
         [SerializeField] private GroundTile _currentTile = default;
         [SerializeField] private ObjectPooler _objectPooler;
         [SerializeField] List<GroundTile> _path = new List<GroundTile>();
+        private float _floatYDistance = .3f;
+        private float _floatDuration = 1f; //in seconds
 
         private void Start()
         {
             _objectPooler = ObjectPooler.Instance;
+            FloatingYLoop();
         }
 
+        private void FloatingYLoop()
+        {
+            transform.DOMoveY(transform.position.y + _floatYDistance, _floatDuration)
+            .SetEase(Ease.InOutSine)
+            .SetLoops(-1, LoopType.Yoyo);
+        }
         public void MoveToTile(GroundTile tile)
         {
             _path = _floorManager.GetBfs(_currentTile, tile);
-            _path.RemoveAt(0);
-            Sequence moveSequence = DOTween.Sequence();
-            foreach (GroundTile currentTile in _path)
+            if (_path != null)
             {
-                Vector3 normalizedYPosition = NormalizeYPosition(currentTile.transform.position);
-                moveSequence.Append(transform.DOMove(normalizedYPosition, .3f).SetEase(Ease.Linear).OnComplete(() =>
+                _path.RemoveAt(0);
+                Sequence moveSequence = DOTween.Sequence();
+                foreach (GroundTile currentTile in _path)
                 {
-                    ReachTile(currentTile);
-                }));
+                    Vector3 normalizedYPosition = NormalizeYPosition(currentTile.transform.position);
+                    moveSequence.Append(transform.DOMove(normalizedYPosition, .3f).SetEase(Ease.Linear).OnComplete(() =>
+                    {
+                        ReachTile(currentTile);
+                    }));
+                }
+                moveSequence.Play();
             }
-            moveSequence.Play();
         }
 
         public void SetPosition(GroundTile tile)
@@ -46,7 +58,7 @@ namespace wisp
         }
         private void ReachTile(GroundTile tile)
         {
-            
+
             DeactivateMechanismOnTile(_currentTile);
             _currentTile = tile;
             ActivateMechanismOnTile(tile);
@@ -60,5 +72,7 @@ namespace wisp
         {
             tile.DeactivateMechanisms();
         }
+
+
     }
 }
