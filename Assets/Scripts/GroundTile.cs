@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ public class GroundTile : MonoBehaviour
     [SerializeField] private FloorManager floorManager;
     [SerializeField] private List<Vector3> possibleNeighborsPosition = new List<Vector3>();
     [SerializeField] private int id;
+    [SerializeField] private bool isActive;
     private Renderer thisRenderer;
     private List<GameObject> listLight = new List<GameObject>();
     private Camera mainCamera;
@@ -24,6 +26,31 @@ public class GroundTile : MonoBehaviour
     public void SetFloorManager(FloorManager floorManager)
     {
         this.floorManager = floorManager;
+    }
+
+    private void OnDisable()
+    {
+        isActive = false;
+    }
+
+    private void OnEnable()
+    {
+        isActive = true;
+    }
+
+    public void Deactivate()
+    {
+        isActive = false;
+    }
+
+    public void Activate()
+    {
+        isActive = true;
+    }
+
+    public bool IsActive()
+    {
+        return isActive;
     }
 
     public int GetId()
@@ -90,9 +117,6 @@ public class GroundTile : MonoBehaviour
                 haloToSelect.Stop();
             }
         }
-        
-        
-        
         
         if(!isForceEnlighten)
         {
@@ -162,7 +186,7 @@ public class GroundTile : MonoBehaviour
 
     public List<GroundTile> GetAllNeighbors()
     {
-        return neighbors;
+        return neighbors.Where(n => n.IsActive()).ToList();
     }
 
     public void SetIsPath()
