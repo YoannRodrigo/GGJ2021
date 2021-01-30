@@ -8,11 +8,12 @@ public class ZoomedCardController : MonoBehaviour
 {
 
     public UICardsController uICardsController;
+    public GameObject zoomedCardGO;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        MasterManager.Instance.sequencer.SQ_RotateLoop(zoomedCardGO, uICardsController.zoomedCardRotationRange, uICardsController.zoomedCardRotationDuration);
     }
 
     // Update is called once per frame

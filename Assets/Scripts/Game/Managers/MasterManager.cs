@@ -11,6 +11,7 @@ public class MasterManager : MonoBehaviour
     //Linked Managers
     [Header("Managers")]
     public CardsManager cardsManager;
+    public Sequencer sequencer;
 
 
     private void Awake()
