@@ -109,6 +109,15 @@ public class GroundTile : MonoBehaviour
         {
             UpdateRenderer();
         }
+        else
+        {
+            foreach (Renderer componentsInChild in GetComponentsInChildren<Renderer>())
+            {
+                componentsInChild.enabled = true;
+            }
+            thisRenderer.enabled = true;
+            isActive = true;
+        }
 
         if(isPlayerOnTile)
         {
@@ -247,5 +256,10 @@ public class GroundTile : MonoBehaviour
         thisRenderer.GetPropertyBlock(propertyBlock);
         propertyBlock.SetColor(COLOR, baseColor);
         thisRenderer.SetPropertyBlock(propertyBlock);
+    }
+
+    public void ForceEnlighten()
+    {
+        isForceEnlighten = true;
     }
 }
