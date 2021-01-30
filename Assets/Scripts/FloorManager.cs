@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class FloorManager : MonoBehaviour
@@ -9,8 +10,15 @@ public class FloorManager : MonoBehaviour
     [SerializeField] private GroundTile selectedTile;
     [SerializeField] private List<Vector3> tilesPosition = new List<Vector3>();
     [SerializeField] private List<GroundTile> path;
+    [SerializeField] private Wisp wisp;
     private bool isTileSelected;
     [SerializeField] private GroundTile playerTile;
+    private Camera mainCamera;
+    private GroundTile lastSelectedTile;
+    private bool isPlayerMoving;
+    [SerializeField] private List<GroundTile> wispGroundTile = new List<GroundTile>();
+    private bool isWispMoving;
+    private GroundTile wispTile;
     public int size {get;set;}
 
     public void SetPlayerTile(GroundTile playerTile)
@@ -34,7 +42,7 @@ public class FloorManager : MonoBehaviour
         return isTileSelected;
     }
 
-    public void TileSelect(GroundTile selectedTile)
+    private void TileSelect(GroundTile selectedTile)
     {
         isTileSelected = true;
         this.selectedTile = selectedTile;
@@ -46,31 +54,18 @@ public class FloorManager : MonoBehaviour
     {
         foreach (GroundTile groundTile in path)
         {
-            groundTile.UnSetPathPathColor();
+            groundTile.SetDefaultColor();
         }
         path.Clear();
     }
 
-    public void UnSelectTile()
+    private void ValidatePath(List<GroundTile> path)
     {
-        isTileSelected = false;
-        selectedTile.Unselect();
-    }
-
-    public void ValidateTile()
-    {
-        //playerManager.SetTarget(selectedTile);
         if(path.Count!=0)
         {
             playerManager.SetPath(path);
         }
     }
-
-    public GameObject GetSelectedTile()
-    {
-        return selectedTile.gameObject;
-    }
-
     public void InitTiles()
     {
         foreach (GroundTile tile in grounds)
@@ -85,14 +80,65 @@ public class FloorManager : MonoBehaviour
         return index >= 0 && index < grounds.Count ? grounds[index] : null;
     }
 
+    private void Start()
+    {
+        mainCamera = Camera.main;
+    }
+
     private void Update()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            if(path.Count!=0)
+            {
+                if(!isPlayerMoving)
+                {
+                    isPlayerMoving = true;
+                    ValidatePath(path);
+                }
+            }
+            else if (wispGroundTile.Count != 0)
+            {
+                if(!isWispMoving)
+                {
+                    isWispMoving = true;
+                    foreach (GroundTile groundTile in wispGroundTile)
+                    {
+                        groundTile.SetDefaultColor();
+                    }
+
+                    ValidateWispTarget(selectedTile);
+                }
+            }
+        }
+
+        if (wispTile && Vector3.Distance(Vector3.Scale(wisp.transform.position, new Vector3(1, 0, 1)), wispTile.transform.position) < 0.01f)
+        {
+            wispTile.StopParticle();
+            isWispMoving = false;
+            wispGroundTile.Clear();
+        }
+        
+        if (path.Count == 0)
+        {
+            isPlayerMoving = false;
+        }
         foreach (GroundTile groundTile in path)
         {
-            groundTile.SetIsPath();
+            groundTile.SetPreSelectedColor();
         }
     }
-    
+
+    private void ValidateWispTarget(GroundTile tile)
+    {
+        if(tile)
+        {
+            wispTile = tile;
+            tile.StopParticle();
+            wisp.SetTargetTile(tile);
+        }
+    }
+
     private void PrintShortestDistance(List<GroundTile> adj, GroundTile start, GroundTile dest, int v, int size)
     {
         GroundTile[] pred = new GroundTile[v];
@@ -115,7 +161,7 @@ public class FloorManager : MonoBehaviour
             crawl = pred[crawl.GetId()];
         }
 
-        if(path.Count <= size)
+        if(path.Count == size)
         {
             this.path = path;
         }
@@ -218,4 +264,122 @@ public class FloorManager : MonoBehaviour
         return null;
     }
 
+    public void ShowPlayerPath(int value)
+    {
+        ClearWispChoice();
+        if(!isPlayerMoving)
+        {
+            selectedTile = GetHighlightedGroundTile();
+            if (!lastSelectedTile)
+            {
+                lastSelectedTile = selectedTile;
+            }
+
+            if (selectedTile)
+            {
+                if (lastSelectedTile.GetInstanceID() != selectedTile.GetInstanceID())
+                {
+                    ClearPath();
+                    lastSelectedTile.StopParticle();
+                    selectedTile.PlayParticle();
+                    lastSelectedTile = selectedTile;
+                }
+
+                if (path.Count == 0)
+                {
+                    size = value;
+                    TileSelect(selectedTile);
+                }
+            }
+            else
+            {
+                if (lastSelectedTile)
+                {
+                    ClearPath();
+                    lastSelectedTile.StopParticle();
+                }
+            }
+        }
+    }
+
+    public void ShowWispChoices(int value)
+    {
+        ClearPath();
+        if(!isWispMoving)
+        {
+            Vector3 wispOnGroundPos = Vector3.Scale(wisp.transform.position, new Vector3(1, 0, 1));
+            List<Vector3> targetPosition = new List<Vector3>()
+            {
+                wispOnGroundPos + new Vector3(0, 0, value),
+                wispOnGroundPos + new Vector3(value, 0, 0),
+                wispOnGroundPos + new Vector3(0, 0, -value),
+                wispOnGroundPos + new Vector3(-value, 0, 0),
+            };
+            GroundTile tile = GetHighlightedGroundTile();
+            
+            foreach (GroundTile groundTile in targetPosition.Select(GetTileByPosition).Where(groundTile => groundTile))
+            {
+                if (!wispGroundTile.Contains(groundTile))
+                {
+                    wispGroundTile.Add(groundTile);
+                    groundTile.SetPreSelectedColor();
+                }
+            }
+
+            if (wispGroundTile.Contains(tile))
+            {
+                selectedTile = tile;
+            }
+            else
+            {
+                selectedTile = null;
+            }
+            
+            if (selectedTile && wispGroundTile.Contains(selectedTile))
+            {
+                if (!lastSelectedTile)
+                {
+                    lastSelectedTile = selectedTile;
+                }
+                if (lastSelectedTile.GetId() != selectedTile.GetId())
+                {
+                    lastSelectedTile.StopParticle();
+                    selectedTile.PlayParticle();
+                }
+            }
+            else
+            {
+                lastSelectedTile.StopParticle();
+            }
+        }
+    }
+
+    private void ClearPath()
+    {
+        foreach (GroundTile groundTile in path)
+        {
+            groundTile.SetDefaultColor();
+        }
+        path.Clear();
+    }
+
+    private void ClearWispChoice()
+    {
+        foreach (GroundTile groundTile in wispGroundTile)
+        {
+            groundTile.SetDefaultColor();
+        }
+        wispGroundTile.Clear();
+    }
+    
+    private GroundTile GetHighlightedGroundTile()
+    {
+        int layer_mask = LayerMask.GetMask("Floor");
+        Ray screenRay = mainCamera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(screenRay, out RaycastHit resultHit, 100, layer_mask))
+        {
+            return resultHit.collider.transform.GetComponent<GroundTile>();
+        }
+        return null;
+    }
 }
