@@ -1,6 +1,7 @@
 ﻿using System;
 using DG.Tweening;
 using UnityEngine;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerManager : MonoBehaviour
@@ -9,10 +10,10 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private bool canMove;
     private Rigidbody thisRigidbody;
 
-    public void SetTarget(Transform target)
-    {
-        this.target = target;
-    }
+    //Cards
+    [Space]
+    [Header("Cards")]
+    public List<Card> playerCards = new List<Card>();
 
     private void Start()
     {
@@ -36,5 +37,15 @@ public class PlayerManager : MonoBehaviour
                 canMove = false;
             }
         }
+
+
+
+    }
+
+
+
+    public void SetTarget(Transform target)
+    {
+        this.target = target;
     }
 }
