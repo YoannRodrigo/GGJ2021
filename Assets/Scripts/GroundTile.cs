@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using UnityEngine;
 
 [RequireComponent(typeof(Renderer))]
@@ -23,6 +24,7 @@ public class GroundTile : MonoBehaviour
     [SerializeField] private List<GroundTile> neighbors;
     private static readonly int COLOR = Shader.PropertyToID("_Color");
     private Color baseColor;
+    private bool baseColorSet;
 
     public void SetFloorManager(FloorManager floorManager)
     {
@@ -71,8 +73,7 @@ public class GroundTile : MonoBehaviour
         haloToSelect = GetComponent<ParticleSystem>();
         mainCamera = Camera.main;
         propertyBlock = new MaterialPropertyBlock();
-        thisRenderer.GetPropertyBlock(propertyBlock);
-        baseColor = new Color(propertyBlock.GetColor(COLOR).r, propertyBlock.GetColor(COLOR).g, propertyBlock.GetColor(COLOR).b, propertyBlock.GetColor(COLOR).a);
+        baseColor = thisRenderer.material.color;
     }
 
     // Update is called once per frame
