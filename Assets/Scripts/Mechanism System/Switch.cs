@@ -15,8 +15,9 @@ public class Switch : Mechanism
     private Animator leverAnim;
     private static readonly int ACTIVATE = Animator.StringToHash("Activate");
 
-    private void Start()
+    public override void Start()
     {
+        base.Start();
         if (lever)
         {
             leverAnim = lever.GetComponent<Animator>();

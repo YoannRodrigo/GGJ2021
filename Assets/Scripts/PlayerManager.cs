@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEditor;
 using UnityEngine;
@@ -7,13 +8,14 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerManager : MonoBehaviour
 {
-    [SerializeField] private GroundTile currentTile;
+    [SerializeField] public GroundTile currentTile;
     [SerializeField] private GroundTile target;
     [SerializeField] private bool canMove;
-    [SerializeField] private List<GroundTile> path;
+    [SerializeField] public List<GroundTile> path;
     [SerializeField] private Wisp wisp;
     private Rigidbody thisRigidbody;
     [SerializeField] private Animator animator;
+    public event Action<GroundTile> InitCurrentTile;
     //Cards
     [Space]
     [Header("Cards")]
@@ -28,6 +30,7 @@ public class PlayerManager : MonoBehaviour
     {
         DeactivateSwitchOnTile();
         currentTile = target;
+        
     }
 
     public void InitPlayerTile(GroundTile tile)
@@ -35,6 +38,11 @@ public class PlayerManager : MonoBehaviour
         if (currentTile == null)
         {
             currentTile = tile;
+            InitCurrentTile?.Invoke(currentTile);
+            if (wisp != null)
+            {
+                wisp.SetPosition(tile);
+            }
         }
     }
 
@@ -50,7 +58,7 @@ public class PlayerManager : MonoBehaviour
 
     private void Update()
     {
-        ActivateSwitchOnTile();
+        //ActivateSwitchOnTile();
         MovePlayer();
         animator.SetFloat(SPEED,speed);
     }
