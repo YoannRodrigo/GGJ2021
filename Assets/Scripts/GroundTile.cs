@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using mechanism;
+using System;
 
 [RequireComponent(typeof(Renderer))]
 [RequireComponent(typeof(ParticleSystem))]
@@ -12,6 +14,7 @@ public class GroundTile : MonoBehaviour
     [SerializeField] private bool isSelected;
     [SerializeField] private ParticleSystem haloToSelect;
     [SerializeField] private FloorManager floorManager;
+    [SerializeField] private List<Mechanism> mechanisms = default;
     [SerializeField] private List<Vector3> possibleNeighborsPosition = new List<Vector3>();
     [SerializeField] private int id;
     [SerializeField] private bool isActive;
@@ -62,7 +65,7 @@ public class GroundTile : MonoBehaviour
     {
         id = x;
     }
-    
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -83,7 +86,7 @@ public class GroundTile : MonoBehaviour
             if (resultHit.collider.transform.GetInstanceID() == transform.GetInstanceID())
             {
                 haloToSelect.Play();
-                if(Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0))
                 {
                     if (floorManager.IsTileSelected() && floorManager.GetSelectedTile().GetInstanceID() != gameObject.GetInstanceID())
                     {
@@ -102,7 +105,7 @@ public class GroundTile : MonoBehaviour
             }
             else
             {
-                if(!isSelected)
+                if (!isSelected)
                 {
                     haloToSelect.Clear();
                     haloToSelect.Stop();
@@ -111,14 +114,17 @@ public class GroundTile : MonoBehaviour
         }
         else
         {
-            if(!isSelected)
+            if (!isSelected)
             {
                 haloToSelect.Clear();
                 haloToSelect.Stop();
             }
         }
-        
-        if(!isForceEnlighten)
+
+
+
+
+        if (!isForceEnlighten)
         {
             UpdateListLight();
             switch (isEnlighten)
@@ -174,7 +180,20 @@ public class GroundTile : MonoBehaviour
     {
         isSelected = false;
     }
-    
+    public void ActivateSwitch()
+    {
+        foreach (Mechanism mechanism in mechanisms)
+        {
+            mechanism.ActivateMechanism();
+        }
+    }
+    public void DeactivateSwitch()
+    {
+        foreach (Mechanism mechanism in mechanisms)
+        {
+            mechanism.DeactivateMechanism();
+        }
+    }
     public void FindNeighbors()
     {
         foreach (GroundTile neighborToFind in possibleNeighborsPosition.Select(possibleNeighborPosition => 

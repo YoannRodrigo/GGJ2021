@@ -57,7 +57,7 @@ public class FloorManager : MonoBehaviour
 
     public void ValidateTile()
     {
-        playerManager.SetTarget(selectedTile.transform);
+        playerManager.SetTarget(selectedTile);
     }
 
     public GameObject GetSelectedTile()
