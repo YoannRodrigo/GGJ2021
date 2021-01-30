@@ -3,9 +3,7 @@ using UnityEngine;
 
 public class MasterManager : MonoBehaviour
 {
-    private static MasterManager _instance;
-
-    public static MasterManager Instance { get { return _instance; } }
+    public static MasterManager Instance { get; private set; }
 
     //Linked Managers
     [Header("Managers")]
@@ -18,11 +16,11 @@ public class MasterManager : MonoBehaviour
     
     private void Awake()
     {
-        if (_instance != null && _instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
         } else {
-            _instance = this;
+            Instance = this;
         }
     }
 
