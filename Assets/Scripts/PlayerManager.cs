@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using wisp;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerManager : MonoBehaviour
@@ -29,7 +30,10 @@ public class PlayerManager : MonoBehaviour
         if (currentTile == null)
         {
             currentTile = tile;
-            wisp.SetPosition(tile);
+            if (wisp != null)
+            {
+                wisp.SetPosition(tile);
+            }
         }
     }
 
@@ -54,7 +58,7 @@ public class PlayerManager : MonoBehaviour
         if (path.Count != 0)
         {
             target = path[path.Count - 1];
-            if(target.IsActive())
+            if (target.IsActive())
             {
                 if (Vector3.Distance(target.transform.position, transform.position) < 0.01f)
                 {

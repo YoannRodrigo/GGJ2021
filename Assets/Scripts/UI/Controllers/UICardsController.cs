@@ -12,7 +12,7 @@ public class UICardsController : MonoBehaviour
 
     [Header("Ui elements")]
     public GameObject cards;
-    public GameObject zoomedCard;
+    public ZoomedCardController zoomedCardController;
 
     public int currentHoveredCardID = -1;
 
@@ -26,7 +26,7 @@ public class UICardsController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DisplayZoomedCard();
+        
     }
 
     public void ShowCard(int id, Card card){
@@ -36,28 +36,42 @@ public class UICardsController : MonoBehaviour
         cardToShow.SetActive(true);
     }
 
-    public void DisplayZoomedCard(){
-        if(currentHoveredCardID == -1){
-            zoomedCard.SetActive(false);
-        }else{
-            SetTargetVisual(zoomedCard, MasterManager.Instance.cardsManager.player.playerCards[currentHoveredCardID]);
-            zoomedCard.SetActive(true);
-        }
-    }
-
     public void SetTargetVisual(GameObject target, Card card){
 
         //Set card sprite
-        target.GetComponent<Image>().sprite = card.sprite;
+        target.transform.Find("Card/CardImage").GetComponent<Image>().sprite = card.sprite;
+
+        //Check for desc then fill
+        if(target.transform.Find("Dialogue")){
+            target.transform.Find("Dialogue/Title").GetComponent<TextMeshProUGUI>().text = card.cardName;
+            target.transform.Find("Dialogue/Text").GetComponent<TextMeshProUGUI>().text = FillCardDescription(card);
+        }
 
         switch(card.arcana){
             case Card.CardArcana.MAJOR : 
-                target.transform.Find("Text").gameObject.SetActive(false);
+                target.transform.Find("Card/Value").gameObject.SetActive(false);
             break;
             case Card.CardArcana.MINOR : 
                 MinorArcanaCard mCard = (MinorArcanaCard)card;
-                target.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = mCard.value.ToString();
-                target.transform.Find("Text").gameObject.SetActive(true);
+                target.transform.Find("Card/Value").GetComponent<TextMeshProUGUI>().text = mCard.value.ToString();
+                target.transform.Find("Card/Value").gameObject.SetActive(true);
+            break;
+        }
+    }
+
+    public string FillCardDescription(Card card){
+        switch(card.arcana){
+            case Card.CardArcana.MAJOR : 
+                return card.description;
+            break;
+            case Card.CardArcana.MINOR : 
+                MinorArcanaCard mCard = (MinorArcanaCard)card;
+                string baseDesc = mCard.description;
+
+                return baseDesc.Replace("{VALUE}", mCard.value.ToString());
+            break;
+            default :
+                return card.description;
             break;
         }
     }

@@ -12,6 +12,7 @@ public class OnMouseOverUI : MonoBehaviour, IPointerEnterHandler
     public void OnPointerEnter(PointerEventData eventData)
     {
         uICardsController.currentHoveredCardID = gameObject.transform.GetSiblingIndex();
+        uICardsController.zoomedCardController.DisplayZoomedCard();
     }
 
     public void OnPointerExit(PointerEventData eventData)

@@ -71,13 +71,13 @@ Shader "Hidden/VLB_URP_SinglePass"
                 #pragma fragment frag
                 #pragma multi_compile_fog
                 
-                #pragma multi_compile_local __ VLB_ALPHA_AS_BLACK
-                #pragma multi_compile_local __ VLB_NOISE_3D
-                #pragma multi_compile_local __ VLB_DEPTH_BLEND
-                #pragma multi_compile_local __ VLB_COLOR_GRADIENT_MATRIX_HIGH
-                #pragma multi_compile_local __ VLB_OCCLUSION_CLIPPING_PLANE VLB_OCCLUSION_DEPTH_TEXTURE
-                #pragma multi_compile_local __ VLB_MESH_SKEWING
-                #pragma multi_compile_local __ VLB_SHADER_ACCURACY_HIGH
+                #pragma multi_compile_local __ VLB_ALPHA_AS_BLACK
+                #pragma multi_compile_local __ VLB_NOISE_3D
+                #pragma multi_compile_local __ VLB_DEPTH_BLEND
+                #pragma multi_compile_local __ VLB_COLOR_GRADIENT_MATRIX_HIGH
+                #pragma multi_compile_local __ VLB_OCCLUSION_CLIPPING_PLANE VLB_OCCLUSION_DEPTH_TEXTURE
+                #pragma multi_compile_local __ VLB_MESH_SKEWING
+                #pragma multi_compile_local __ VLB_SHADER_ACCURACY_HIGH
 
 
                 #define VLB_PASS_OUTSIDEBEAM_FROM_VS_TO_FS 1
