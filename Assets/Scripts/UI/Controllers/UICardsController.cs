@@ -16,19 +16,6 @@ public class UICardsController : MonoBehaviour
 
     public int currentHoveredCardID = -1;
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void ShowCard(int id, Card card){
         GameObject cardToShow = cards.transform.GetChild(id).gameObject;
 
@@ -43,16 +30,19 @@ public class UICardsController : MonoBehaviour
 
         //Check for desc then fill
         if(target.transform.Find("Dialogue")){
-            target.transform.Find("Dialogue/Title").GetComponent<TextMeshProUGUI>().text = card.cardName;
             target.transform.Find("Dialogue/Text").GetComponent<TextMeshProUGUI>().text = FillCardDescription(card);
         }
 
         switch(card.arcana){
             case Card.CardArcana.MAJOR : 
+                if(target.transform.Find("Dialogue"))
+                    target.transform.Find("Dialogue/Title").GetComponent<TextMeshProUGUI>().text = card.cardName;
                 target.transform.Find("Card/Value").gameObject.SetActive(false);
             break;
             case Card.CardArcana.MINOR : 
                 MinorArcanaCard mCard = (MinorArcanaCard)card;
+                if(target.transform.Find("Dialogue"))
+                    target.transform.Find("Dialogue/Title").GetComponent<TextMeshProUGUI>().text = mCard.value + " of " + mCard.family;
                 target.transform.Find("Card/Value").GetComponent<TextMeshProUGUI>().text = mCard.value.ToString();
                 target.transform.Find("Card/Value").gameObject.SetActive(true);
             break;
