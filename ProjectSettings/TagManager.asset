@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Light
   - Floor
+  - Collectible
   layers:
   - Default
   - TransparentFX
@@ -42,4 +43,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: WorldUI
+    uniqueID: 1432303583
     locked: 0
