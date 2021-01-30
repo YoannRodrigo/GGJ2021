@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-namespace objectPooler
-{
+
     [System.Serializable]
 
     public class ObjectPool
@@ -141,5 +140,4 @@ namespace objectPooler
             }
             return null;
         }
-    }
 }

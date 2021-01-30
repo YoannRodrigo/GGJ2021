@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using wisp;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerManager : MonoBehaviour
@@ -12,6 +11,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GroundTile target;
     [SerializeField] private bool canMove;
     [SerializeField] private List<GroundTile> path;
+    [SerializeField] private Wisp wisp;
     private Rigidbody thisRigidbody;
     //Cards
     [Space]

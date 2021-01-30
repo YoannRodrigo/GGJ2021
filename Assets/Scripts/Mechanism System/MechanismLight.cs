@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ObjectPooler;
 
 namespace mechanism
 {
@@ -42,4 +41,4 @@ namespace mechanism
 
         }
     }
-}}
+}
