@@ -8,18 +8,20 @@ public class MechanismLight : Mechanism
 
     private ObjectPooler _objectPooler;
     private ObjectPoolItem _pooledLightItem = null;
+    [SerializeField] private SoundManager _soundManager;
 
 
     public override void Start()
     {
         base.Start();
         _objectPooler = ObjectPooler.GetInstance();
+        _soundManager = SoundManager.instance;
     }
 
     public override void ActivateMechanism()
     {
         base.ActivateMechanism();
-
+        SoundManager.instance.PlayRandomSound(new string[]{"SpotLight_On_1","SpotLight_On_2","SpotLight_On_3","SpotLight_On_4","SpotLight_On_5"});
         if (poolIsNeeded)
         {
             if (_pooledLightItem == null)

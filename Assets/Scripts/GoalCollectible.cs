@@ -8,6 +8,7 @@ public class GoalCollectible : MonoBehaviour
         {
             other.GetComponentInParent<PlayerManager>().Win();
             gameObject.SetActive(false);
+            SoundManager.instance.PlaySound("Goal");
         }
     }
 }

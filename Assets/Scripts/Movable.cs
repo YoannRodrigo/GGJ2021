@@ -31,5 +31,6 @@ public class Movable : MonoBehaviour
     public void MoveToDirection(Vector3 targetPosition)
     {
         transform.DOMove(targetPosition, 1).SetEase(Ease.InQuad);
+        SoundManager.instance.PlaySound("Rolling");
     }
 }

@@ -23,6 +23,7 @@ public class FloorManager : MonoBehaviour
     [SerializeField] private Movable movableObject;
     private int movableValue;
     public int size {get;set;}
+    private SoundManager _soundManager;
 
     public void SetPlayerTile(GroundTile playerTile)
     {
@@ -86,6 +87,7 @@ public class FloorManager : MonoBehaviour
     private void Start()
     {
         mainCamera = Camera.main;
+        _soundManager = SoundManager.instance;
     }
 
     private void Update()
@@ -151,6 +153,7 @@ public class FloorManager : MonoBehaviour
         {
             GameObject rock = groundTile.transform.GetComponentInChildren<Destroyable>().gameObject;
             rock.SetActive(false);
+            _soundManager.PlayRandomSound(new string[]{"Demolish_1","Demolish_2","Demolish_3","Demolish_4","Demolish_5"});
             groundTile.ForceActivate(false);
             playerAttackTiles.Clear();
         }

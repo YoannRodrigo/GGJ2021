@@ -17,7 +17,7 @@ public class Wisp : MonoBehaviour
     private bool _inMovement = false;
 
     public GroundTile CurrentTile { get => _currentTile; set => _currentTile = value; }
-        public event Action<GroundTile> InitCurrentTile;
+    public event Action<GroundTile> InitCurrentTile;
 
     private void Start()
     {
@@ -37,11 +37,12 @@ public class Wisp : MonoBehaviour
     {
         if (_currentTile)
         {
-            if(!_inMovement){
+            if (!_inMovement)
+            {
                 _soundManager.PlaySound("WispStartMovingFeedback");
                 _inMovement = true;
             }
-            SwapToMovingSound();
+            _soundManager.FadeInSound("WispMoving", FADE_TIME);
             Vector3 target = new Vector3(_currentTile.transform.position.x, transform.position.y, _currentTile.transform.position.z);
             transform.DOMove(target, 1).SetEase(Ease.Linear);
             if (Vector3.Distance(target, transform.position) < 0.01f)
@@ -50,24 +51,18 @@ public class Wisp : MonoBehaviour
                 _currentTile = null;
             }
         }
-        else{
-            SwapToIdleSound();
+        else
+        {
+            _soundManager.FadeOutSound("wispMoving",FADE_TIME);
             _inMovement = false;
         }
     }
-    private void SwapToIdleSound(){
-        _soundManager.FadeInSound("WispIdle", FADE_TIME);
-        _soundManager.FadeOutSound("WispMoving",FADE_TIME);
-    }
-    private void SwapToMovingSound(){
-        _soundManager.FadeInSound("WispMoving", FADE_TIME);
-        _soundManager.FadeOutSound("WispIdle",FADE_TIME);
-    }
+
     public void SetTargetTile(GroundTile targetTile)
     {
         _currentTile = targetTile;
     }
-    
+
     private void MoveToTile(GroundTile tile)
     {
         _path = _floorManager.GetBfs(_currentTile, tile);
