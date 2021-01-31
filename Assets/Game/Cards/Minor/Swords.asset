@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Swords
   arcana: 1
-  sprite: {fileID: 21300000, guid: 5e6a159a4b593854dad3b8bd3cee07c3, type: 3}
+  sprite: {fileID: 21300000, guid: 75ea772eca0fab64892ef768edcb9627, type: 3}
   description: <color=#f29f41>Destroy</color> an object <color=#2ab006>{VALUE}</color>
     tiles ahead in any direction.

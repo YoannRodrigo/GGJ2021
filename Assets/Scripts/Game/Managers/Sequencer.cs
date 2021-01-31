@@ -8,7 +8,7 @@ public class Sequencer : MonoBehaviour
 
         target.transform.DOMoveY(heightPos, duration).SetEase(Ease.OutCubic)
         .OnComplete(()=>{
-            target.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(target.GetComponent<RectTransform>().anchoredPosition3D.x ,target.GetComponent<RectTransform>().anchoredPosition3D.y, .8f);
+            target.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(target.GetComponent<RectTransform>().anchoredPosition3D.x ,target.GetComponent<RectTransform>().anchoredPosition3D.y, target.GetComponent<RectTransform>().anchoredPosition3D.z);
         });
 
         
