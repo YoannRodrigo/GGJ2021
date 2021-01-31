@@ -1,17 +1,14 @@
 fileFormatVersion: 2
-guid: 9fd316fe09f588d4d9f80ccb7601e43f
+guid: 88c94522ea00d9e4baaa4483cb61fd93
 ModelImporter:
   serializedVersion: 20101
-  internalIDToNameTable:
-  - first:
-      74: -6993101219729967766
-    second: Rotate
+  internalIDToNameTable: []
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: lambert1
-    second: {fileID: 2100000, guid: 1a0f6554c7f27484db96f1a94dbe9cbf, type: 2}
+    second: {fileID: 2100000, guid: 244e39de13371da43be0d10ab5bf3a60, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -38,36 +35,7 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations:
-    - serializedVersion: 16
-      name: Rotate
-      takeName: Rotate
-      internalID: 0
-      firstFrame: 2
-      lastFrame: 120
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 2
+    clipAnimations: []
     isReadable: 0
   meshes:
     lODScreenPercentages: []
