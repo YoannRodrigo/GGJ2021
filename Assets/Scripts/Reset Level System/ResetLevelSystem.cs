@@ -30,7 +30,7 @@ public class ResetLevelSystem : MonoBehaviour
     {
         PlayerSaveValues();
         WispSaveValues();
-        _soundManager.PlayMusic("MainMusic");
+        _soundManager.PlaySoundLoop("Music");
         GetResetables();
     }
     private void Start()
@@ -69,7 +69,7 @@ public class ResetLevelSystem : MonoBehaviour
     public void ResetToOriginalState()
     {
 
-        _soundManager.FadeAllSounds();
+        //_soundManager.FadeAllSounds();
         _blackFade.ActivateTrigger();
         BlackFade.instance.EndAnimationAction += LaunchReset;
     }

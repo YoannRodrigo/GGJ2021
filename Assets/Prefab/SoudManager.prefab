@@ -378,6 +378,15 @@ MonoBehaviour:
     pitch: 1
     randomVolume: 0
     randomPitch: 0
+  - name: Music
+    isFadeIn: 0
+    isFadeOut: 0
+    finnishFade: 0
+    clip: {fileID: 8300000, guid: c7773dd8c9e86bb4ea0348dad8646bf1, type: 3}
+    volume: 1
+    pitch: 1
+    randomVolume: 0
+    randomPitch: 0
   musiques:
   - name: MainMusic
     isFadeIn: 0
