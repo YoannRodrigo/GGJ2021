@@ -212,7 +212,7 @@ MonoBehaviour:
     isFadeOut: 0
     finnishFade: 0
     clip: {fileID: 8300000, guid: c91dce09089684c42a615c50bb9baf94, type: 3}
-    volume: 4
+    volume: 0
     pitch: 1
     randomVolume: 0
     randomPitch: 0
@@ -221,7 +221,7 @@ MonoBehaviour:
     isFadeOut: 0
     finnishFade: 0
     clip: {fileID: 8300000, guid: dff4fd38a25fb774c8d09026c7fb6350, type: 3}
-    volume: 1
+    volume: 0
     pitch: 1
     randomVolume: 0
     randomPitch: 0
