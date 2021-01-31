@@ -30,7 +30,8 @@ public class OnMouseOverUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if(MasterManager.Instance.cardsManager.activeCardID != gameObject.transform.GetSiblingIndex()){
             MasterManager.Instance.sequencer.Move(gameObject, boundaries.x, uICardsController.onMouseHoverDuration);
-            uICardsController.currentHoveredCardID = -1;
+            uICardsController.currentHoveredCardID = MasterManager.Instance.cardsManager.activeCardID;
+            uICardsController.zoomedCardController.DisplayZoomedCard();
         }
     }
 }
