@@ -89,6 +89,12 @@ public class PlayerManager : MonoBehaviour
         else
         {
             speed = Mathf.Lerp(speed, 0, 5f * Time.deltaTime);
+            SoundManager.instance.StopSound("Foots_1");
+            SoundManager.instance.StopSound("Foots_2");
+            SoundManager.instance.StopSound("Foots_3");
+            SoundManager.instance.StopSound("Foots_4");
+            SoundManager.instance.StopSound("Foots_5");
+            
         }
     }
 
