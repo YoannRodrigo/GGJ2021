@@ -19,6 +19,7 @@ public class OnMouseOverUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         MasterManager.Instance.sequencer.SQ_Move(gameObject, boundaries.y, 1, uICardsController.onMouseHoverDuration);
         uICardsController.currentHoveredCardID = gameObject.transform.GetSiblingIndex();
         uICardsController.zoomedCardController.DisplayZoomedCard();
+
     }
 
     public void OnPointerExit(PointerEventData eventData)

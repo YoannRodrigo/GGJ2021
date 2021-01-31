@@ -8,7 +8,7 @@ public class Sequencer : MonoBehaviour
         Sequence sq_moveUp = DOTween.Sequence();
 
         sq_moveUp
-            .Join(target.transform.DOMoveY(heightPos, duration)).SetEase(Ease.OutCubic);
+            .Append(target.GetComponent<RectTransform>().DOMoveY(heightPos * direction, duration)).SetEase(Ease.OutCubic);
         
         sq_moveUp.Play();
     }
