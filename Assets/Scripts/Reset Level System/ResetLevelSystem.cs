@@ -18,7 +18,7 @@ public class ResetLevelSystem : MonoBehaviour
     public void GetResetables()
     {
 
-        _mechanisms = Resources.FindObjectsOfTypeAll(typeof(Mechanism)) as Mechanism[];
+        _mechanisms = GameObject.FindObjectsOfType(typeof(Mechanism)) as Mechanism[];
         _player = FindObjectOfType<PlayerManager>();
         _wisp = FindObjectOfType<Wisp>();
         _floorManager = FindObjectOfType<FloorManager>();
@@ -33,7 +33,8 @@ public class ResetLevelSystem : MonoBehaviour
         _soundManager.PlayMusic("MainMusic");
         GetResetables();
     }
-    private void Start(){
+    private void Start()
+    {
         _blackFade = BlackFade.instance;
     }
 
@@ -67,11 +68,17 @@ public class ResetLevelSystem : MonoBehaviour
 
     public void ResetToOriginalState()
     {
+
+        _soundManager.FadeAllSounds();
+        _blackFade.ActivateTrigger();
+        BlackFade.instance.EndAnimationAction += LaunchReset;
+    }
+    private void LaunchReset()
+    {
         MechanismsReset();
         WispReset();
         PlayerReset();
-        _soundManager.FadeAllSounds();
-        _blackFade.ActivateTrigger();
+        BlackFade.instance.ActivateTrigger();
     }
     private void MechanismsReset()
     {
@@ -80,8 +87,6 @@ public class ResetLevelSystem : MonoBehaviour
             mechanism.Reset();
         }
     }
-
-
 
     private void WispReset()
     {

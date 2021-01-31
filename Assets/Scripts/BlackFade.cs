@@ -26,5 +26,6 @@ public class BlackFade : MonoBehaviour
 
     public void CallActionOnEnd(){
         EndAnimationAction?.Invoke();
+        EndAnimationAction = null;
     }
 }
