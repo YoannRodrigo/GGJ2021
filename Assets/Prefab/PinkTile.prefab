@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 562205547300508965}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 2, y: 0, z: -3}
+  m_LocalPosition: {x: 2, y: 0.03, z: -3}
   m_LocalScale: {x: 1.7, y: 3.4, z: 1.7}
   m_Children:
   - {fileID: 6083019145512795710}
@@ -141,6 +141,7 @@ MonoBehaviour:
   - {x: 0, y: 0, z: -1}
   id: 0
   isActive: 0
+  listLight: []
   neighbors: []
 --- !u!1 &7386438347716226962
 GameObject:
