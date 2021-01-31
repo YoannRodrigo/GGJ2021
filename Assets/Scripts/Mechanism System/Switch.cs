@@ -13,6 +13,7 @@ public class Switch : Mechanism
     [SerializeField] private GameObject thisLight;
     [SerializeField] private bool isActive;
     private Animator leverAnim;
+    private SoundManager _soundManager;
     private static readonly int ACTIVATE = Animator.StringToHash("Activate");
 
     public override void Start()
@@ -22,6 +23,7 @@ public class Switch : Mechanism
         {
             leverAnim = lever.GetComponent<Animator>();
         }
+        _soundManager = SoundManager.instance;
     }
 
     private void Activate()
@@ -46,6 +48,7 @@ public class Switch : Mechanism
         {
             sSwitch.Activate();
         }
+        _soundManager.PlayRandomSound(new string[]{"Lever_1","Lever_2","Lever_3","Lever_4","Lever_5"});
     }
 
     public override void DeactivateMechanism()
