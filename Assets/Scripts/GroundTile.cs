@@ -234,7 +234,7 @@ public class GroundTile : MonoBehaviour
 
     public void SetPreSelectedColor()
     {
-        if(!isPlayerOnTile)
+        if(!isPlayerOnTile && thisRenderer)
         {
             thisRenderer.GetPropertyBlock(propertyBlock);
             propertyBlock.SetColor(COLOR, new Color(0, 0.5f, 0));
@@ -244,9 +244,12 @@ public class GroundTile : MonoBehaviour
 
     public void SetDefaultColor()
     {
-        thisRenderer.GetPropertyBlock(propertyBlock);
-        propertyBlock.SetColor(COLOR, baseColor);
-        thisRenderer.SetPropertyBlock(propertyBlock);
+        if(thisRenderer)
+        {
+            thisRenderer.GetPropertyBlock(propertyBlock);
+            propertyBlock.SetColor(COLOR, baseColor);
+            thisRenderer.SetPropertyBlock(propertyBlock);
+        }
     }
 
     public void ForceEnlighten()
