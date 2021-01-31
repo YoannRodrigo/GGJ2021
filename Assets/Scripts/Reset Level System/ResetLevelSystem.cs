@@ -8,6 +8,7 @@ public class ResetLevelSystem : MonoBehaviour
     [SerializeField] private PlayerManager _player = default;
     [SerializeField] private Wisp _wisp = default;
     [SerializeField] private FloorManager _floorManager = default;
+    [SerializeField] private SoundManager _soundManager = default;
     private Vector3 _playerOriginalPosition = default;
     private Vector3 _wispOriginalPosition = default;
     private GroundTile _playerOriginalTile = default;
@@ -32,6 +33,7 @@ public class ResetLevelSystem : MonoBehaviour
         _player.path.Clear();
         _floorManager.UnselectTile();
         _floorManager.ResetPathColor();
+        _soundManager.FadeAllSounds();
     }
 
     private void Awake()
@@ -42,6 +44,7 @@ public class ResetLevelSystem : MonoBehaviour
         _wispOriginalTile = _wisp.CurrentTile;
         _player.InitCurrentTile += SetPlayerOriginalTile;
         _wisp.InitCurrentTile += SetWispOriginalTile;
+        _soundManager.PlayMusic("MainMusic");
     }
 
     private void SetPlayerOriginalTile(GroundTile tile){

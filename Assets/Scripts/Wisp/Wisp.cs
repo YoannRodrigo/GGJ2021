@@ -5,13 +5,16 @@ using UnityEngine;
 
 public class Wisp : MonoBehaviour
 {
+    private const float FADE_TIME = .5f;
     [SerializeField] private PlayerManager _player = default;
     [SerializeField] private FloorManager _floorManager = default;
     [SerializeField] private GroundTile _currentTile = default;
     [SerializeField] private ObjectPooler _objectPooler;
     [SerializeField] public List<GroundTile> _path = new List<GroundTile>();
+    [SerializeField] private SoundManager _soundManager;
     private float _floatYDistance = .3f;
     private float _floatDuration = 1f; //in seconds
+    private bool _inMovement = false;
 
     public GroundTile CurrentTile { get => _currentTile; set => _currentTile = value; }
         public event Action<GroundTile> InitCurrentTile;
@@ -20,6 +23,7 @@ public class Wisp : MonoBehaviour
     {
         _objectPooler = ObjectPooler.Instance;
         FloatingYLoop();
+        _soundManager.PlaySoundLoop("WispIdle");
     }
 
     private void FloatingYLoop()
@@ -32,6 +36,11 @@ public class Wisp : MonoBehaviour
     {
         if (_currentTile)
         {
+            if(!_inMovement){
+                _soundManager.PlaySound("WispStartMovingFeedback");
+                _inMovement = true;
+            }
+            SwapToMovingSound();
             Vector3 target = new Vector3(_currentTile.transform.position.x, transform.position.y, _currentTile.transform.position.z);
             transform.DOMove(target, 1).SetEase(Ease.Linear);
             if (Vector3.Distance(target, transform.position) < 0.01f)
@@ -40,8 +49,19 @@ public class Wisp : MonoBehaviour
                 _currentTile = null;
             }
         }
+        else{
+            SwapToIdleSound();
+            _inMovement = false;
+        }
     }
-
+    private void SwapToIdleSound(){
+        _soundManager.FadeInSound("WispIdle", FADE_TIME);
+        _soundManager.FadeOutSound("WispMoving",FADE_TIME);
+    }
+    private void SwapToMovingSound(){
+        _soundManager.FadeInSound("WispMoving", FADE_TIME);
+        _soundManager.FadeOutSound("WispIdle",FADE_TIME);
+    }
     public void SetTargetTile(GroundTile targetTile)
     {
         _currentTile = targetTile;

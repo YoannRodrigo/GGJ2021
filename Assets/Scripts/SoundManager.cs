@@ -11,6 +11,7 @@ public class Sound {
 	public bool isFadeIn,isFadeOut,finnishFade;
 	public Coroutine fadeInCoroutine,fadeOutCoroutine,fadeOutVolumeCoroutine,fadeInVolumeCoroutine;
 	public AudioClip clip;
+	[Range(0f,1f)]
 	public float volume = 0.7f;
 	[Range(0.5f,1.5f)]
 	public float pitch = 1f;
@@ -233,6 +234,44 @@ public class SoundManager : MonoBehaviour {
 			}
 		}
 	}
+		public void FadeOutSound(string soundName,float fadeTime){
+		foreach(Sound _sound in sounds ){
+			if(_sound.name == soundName){
+				if(_sound.isPlaying()){
+					if(_sound.isFadeIn){
+						StopCoroutine(_sound.fadeInCoroutine);
+						StartCoroutine(_sound.EndFadeIn());
+					}
+					_sound.fadeOutCoroutine = StartCoroutine(_sound.FadeOut(fadeTime));
+				}
+			}
+		}
+	}
+
+	public void FadeInSound(string soundName,float fadeTime, bool overPlay = false){
+		foreach(Sound _sound in sounds ){
+			if(_sound.name == soundName){
+				if(overPlay){
+					if(_sound.isFadeOut || _sound.isFadeIn){
+						if(_sound.isFadeOut){
+							StopCoroutine(_sound.fadeOutCoroutine);
+							StartCoroutine(_sound.EndFadeOut());
+						}
+						if(_sound.isFadeIn){
+							
+							StopCoroutine(_sound.fadeInCoroutine);
+							StartCoroutine(_sound.EndFadeIn());
+						}
+
+					}
+				}
+				if(!_sound.isPlaying()){
+					_sound.fadeInCoroutine = StartCoroutine(_sound.FadeIn(fadeTime));
+					_sound.makeItLoop();
+				}
+			}
+		}
+	}
 	public void StopMusic(string musiqueName){
 		foreach(Sound _sound in musiques ){
 			if(_sound.name == musiqueName){
@@ -321,6 +360,13 @@ public class SoundManager : MonoBehaviour {
 				FadeOutMusic(_sound.name,.5f);
 			}	
 		}
+		foreach(Sound s in sounds ){
+			if(s.isPlaying()){
+				StopSound(s.name);
+			}	
+		}
+	}
+	public void FadeAllSounds(){
 		foreach(Sound s in sounds ){
 			if(s.isPlaying()){
 				StopSound(s.name);
