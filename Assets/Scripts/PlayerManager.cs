@@ -30,7 +30,7 @@ public class PlayerManager : MonoBehaviour
     {
         DeactivateSwitchOnTile();
         currentTile = target;
-        
+
     }
 
     public void InitPlayerTile(GroundTile tile)
@@ -60,7 +60,7 @@ public class PlayerManager : MonoBehaviour
     {
         //ActivateSwitchOnTile();
         MovePlayer();
-        animator.SetFloat(SPEED,speed);
+        animator.SetFloat(SPEED, speed);
     }
 
     private void MovePlayer()
@@ -82,7 +82,7 @@ public class PlayerManager : MonoBehaviour
             }
             else
             {
-                
+
                 path.Clear();
             }
         }
@@ -104,13 +104,19 @@ public class PlayerManager : MonoBehaviour
 
     public void Win()
     {
+        BlackFade.instance.EndAnimationAction += SceneSwitch;
+        BlackFade.instance.ActivateTrigger();
+    }
+    public void SceneSwitch()
+    {
+        Debug.Log("Scene Switch");
         int buildIndex = SceneManager.sceneCountInBuildSettings;
-        if(SceneManager.GetActiveScene().buildIndex + 1 < buildIndex)
+        if (SceneManager.GetActiveScene().buildIndex + 1 < buildIndex)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
         else
-        { 
+        {
             Application.Quit();
         }
     }
