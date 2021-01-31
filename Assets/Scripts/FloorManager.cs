@@ -162,6 +162,7 @@ public class FloorManager : MonoBehaviour
         isTileSelected = false;
         selectedTile.StopParticle();
         selectedTile = null;
+        lastSelectedTile = null;
     }
 
     private void PrintShortestDistance(List<GroundTile> adj, GroundTile start, GroundTile dest, int v, int size)

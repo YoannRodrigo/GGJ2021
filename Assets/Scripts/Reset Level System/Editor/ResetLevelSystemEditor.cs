@@ -8,10 +8,11 @@ public class ResetLevelSystemEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        if (GUILayout.Button("Gets Mechanisms in Scene"))
+        if (GUILayout.Button("Gets resetables elements"))
         {
             ResetLevelSystem resetSystem = (ResetLevelSystem)target;
-            resetSystem.GetAllMechanisms();
+            resetSystem.GetResetables();
+
         }
         if (GUILayout.Button("Reset Scene"))
         {
