@@ -9,6 +9,7 @@ public class ResetLevelSystem : MonoBehaviour
     [SerializeField] private Wisp _wisp = default;
     [SerializeField] private FloorManager _floorManager = default;
     [SerializeField] private SoundManager _soundManager = default;
+    [SerializeField] private Animator _blackFade = default;
     private Vector3 _playerOriginalPosition = default;
     private Vector3 _wispOriginalPosition = default;
     private GroundTile _playerOriginalTile = default;
@@ -16,7 +17,7 @@ public class ResetLevelSystem : MonoBehaviour
 
     public void GetResetables()
     {
-        
+
         _mechanisms = Resources.FindObjectsOfTypeAll(typeof(Mechanism)) as Mechanism[];
         _player = FindObjectOfType<PlayerManager>();
         _wisp = FindObjectOfType<Wisp>();
@@ -31,6 +32,7 @@ public class ResetLevelSystem : MonoBehaviour
         WispSaveValues();
         _soundManager.PlayMusic("MainMusic");
         GetResetables();
+        _blackFade.SetTrigger("Fade");
     }
 
     private void PlayerSaveValues()
@@ -67,8 +69,8 @@ public class ResetLevelSystem : MonoBehaviour
         WispReset();
         PlayerReset();
         _soundManager.FadeAllSounds();
+        _blackFade.SetTrigger("Fade");
     }
-
     private void MechanismsReset()
     {
         foreach (Mechanism mechanism in _mechanisms)
@@ -103,4 +105,5 @@ public class ResetLevelSystem : MonoBehaviour
         _floorManager.UnselectTile();
         _floorManager.ResetPathColor();
     }
+
 }

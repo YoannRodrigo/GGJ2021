@@ -10,6 +10,9 @@ public class CardsManager : MonoBehaviour
     private Card cardToPlay;
     public int activeCardID = -1;
 
+    private void Start(){
+        _soundManager = SoundManager.instance;
+    }
     public List<Card> GetCards()
     {
         return cards;
