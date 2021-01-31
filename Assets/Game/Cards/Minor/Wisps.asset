@@ -15,4 +15,4 @@ MonoBehaviour:
   cardName: Wisps
   arcana: 1
   sprite: {fileID: 21300000, guid: 5e6a159a4b593854dad3b8bd3cee07c3, type: 3}
-  description: Send Wisp {VALUE} cases ahead in any direction.
+  description: Send Wisp {VALUE} tiles ahead in any direction.
