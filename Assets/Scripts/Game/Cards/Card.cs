@@ -15,7 +15,7 @@ public class Card : ScriptableObject {
         WISPS,
         DICE,
         SWORDS,
-        TBD3
+        WANDS
     }
 
     public enum CardMajorType{

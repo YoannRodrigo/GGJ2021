@@ -20,6 +20,8 @@ public class FloorManager : MonoBehaviour
     private bool isWispMoving;
     private GroundTile wispTile;
     [SerializeField] private List<GroundTile> playerAttackTiles;
+    [SerializeField] private Movable movableObject;
+    private int movableValue;
     public int size {get;set;}
 
     public void SetPlayerTile(GroundTile playerTile)
@@ -118,6 +120,11 @@ public class FloorManager : MonoBehaviour
                     playerAttackTile.SetDefaultColor();
                 }
                 ValidateAttackTarget(selectedTile);
+            }
+            else if (movableObject)
+            {
+                movableObject.MoveToDirection(movableObject.transform.position + movableValue*(movableObject.transform.position - playerManager.transform.position).normalized);
+                movableObject = null;
             }
         }
 
@@ -294,6 +301,7 @@ public class FloorManager : MonoBehaviour
     {
         ClearWispChoice();
         ClearAttackChoice();
+        ResetMovableObject();
         if(!isPlayerMoving)
         {
             selectedTile = GetHighlightedGroundTile();
@@ -333,6 +341,7 @@ public class FloorManager : MonoBehaviour
     {
         ClearPath();
         ClearAttackChoice();
+        ResetMovableObject();
         Vector3 wispOnGroundPos = Vector3.Scale(wisp.transform.position, new Vector3(1, 0, 1));
         List<Vector3> targetPosition = new List<Vector3>()
         {
@@ -421,6 +430,9 @@ public class FloorManager : MonoBehaviour
 
     public void ShowPlayerAttack(int value)
     {
+        ClearPath();
+        ClearWispChoice();
+        ResetMovableObject();
         Vector3 playerPos = playerManager.transform.position;
         List<Vector3> targetPosition = new List<Vector3>()
         {
@@ -467,5 +479,82 @@ public class FloorManager : MonoBehaviour
         {
             lastSelectedTile.StopParticle();
         }
+    }
+
+    public void ShowPlayerMove(int value)
+    {
+        ClearPath();
+        ClearWispChoice();
+        ClearAttackChoice();
+        movableValue = value;
+        Vector3 playerPos = playerManager.transform.position;
+        List<Vector3> targetPosition = new List<Vector3>()
+        {
+            playerPos + new Vector3(0, 0, 1),
+            playerPos + new Vector3(1, 0, 0),
+            playerPos + new Vector3(0, 0, -1),
+            playerPos + new Vector3(-1, 0, 0),
+        };
+        List<Movable> allMovableObjectInRange = new List<Movable>();
+        List<GroundTile> allMovableGroundTile = new List<GroundTile>();
+        foreach (GroundTile groundTile in targetPosition.Select(GetTileByPosition))
+        {
+            Movable movableTarget = groundTile.GetComponentInChildren<Movable>();
+            if (movableTarget)
+            {
+                allMovableObjectInRange.Add(movableTarget);
+                allMovableGroundTile.Add(groundTile);
+            }
+        }
+
+        foreach (GroundTile groundTile in allMovableGroundTile)
+        {
+            groundTile.SetPreSelectedColor();
+        }
+        
+        GroundTile tile = GetHighlightedGroundTile();
+        if (allMovableGroundTile.Contains(tile))
+        {
+            selectedTile = tile;
+        }
+        else
+        {
+            selectedTile = null;
+        }
+
+        if (selectedTile)
+        {
+            if (!lastSelectedTile)
+            {
+                lastSelectedTile = selectedTile;
+            }
+            if (lastSelectedTile.GetId() != selectedTile.GetId())
+            {
+                lastSelectedTile = selectedTile;
+                lastSelectedTile.StopParticle();
+                selectedTile.PlayParticle();
+            }
+
+            int index = allMovableGroundTile.IndexOf(selectedTile);
+            if (Vector3.Distance(allMovableObjectInRange[index].transform.position, playerManager.transform.position) > 1.5f)
+            {
+                movableObject = null;
+            }
+            else
+            {
+                movableObject = allMovableObjectInRange[index];
+            }
+            
+        }
+        else
+        {
+            movableObject = null;
+            lastSelectedTile.StopParticle();
+        }
+    }
+
+    private void ResetMovableObject()
+    {
+        movableObject = null;
     }
 }

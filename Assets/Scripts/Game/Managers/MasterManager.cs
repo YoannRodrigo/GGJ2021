@@ -44,7 +44,8 @@ public class MasterManager : MonoBehaviour
                 case Card.CardFamily.SWORDS:
                     floorManager.ShowPlayerAttack(minorArcanaCard.value);
                     break;
-                case Card.CardFamily.TBD3:
+                case Card.CardFamily.WANDS:
+                    floorManager.ShowPlayerMove(minorArcanaCard.value);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
