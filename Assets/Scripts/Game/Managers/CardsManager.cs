@@ -32,9 +32,11 @@ public class CardsManager : MonoBehaviour
     public void PlayCard(int cardIndex){
         if(activeCardID != -1){
             MasterManager.Instance.sequencer.Move(uICardsController.cards.transform.GetChild(activeCardID).gameObject, 0, uICardsController.onMouseHoverDuration);
+            uICardsController.cards.transform.GetChild(activeCardID).Find("ActiveParticle").gameObject.SetActive(false);
         }
         activeCardID = cardIndex;
         cardToPlay = cards[cardIndex];
+        uICardsController.cards.transform.GetChild(activeCardID).Find("ActiveParticle").gameObject.SetActive(true);
         _soundManager.PlayRandomSound(new string[]{"CardUse_1","CardUse_2","CardUse_3","CardUse_4","CardUse_5"});
     }
 

@@ -9,6 +9,7 @@ public class ZoomedCardController : MonoBehaviour
 
     public UICardsController uICardsController;
     public GameObject zoomedCardGO;
+    public GameObject activeText;
 
     // Start is called before the first frame update
     void Start()
@@ -19,7 +20,11 @@ public class ZoomedCardController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(MasterManager.Instance.cardsManager.activeCardID == uICardsController.currentHoveredCardID){
+            activeText.SetActive(true);
+        }else{
+            activeText.SetActive(false);
+        }
     }
 
     public void DisplayZoomedCard(){

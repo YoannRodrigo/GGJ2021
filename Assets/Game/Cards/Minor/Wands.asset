@@ -15,4 +15,5 @@ MonoBehaviour:
   cardName: 
   arcana: 1
   sprite: {fileID: 21300000, guid: 5e6a159a4b593854dad3b8bd3cee07c3, type: 3}
-  description: Move an contact object at {VALUE} tiles ahead.
+  description: <color=#f29f41>Push</color> an object at contact <color=#2ab006>{VALUE}</color>
+    tiles ahead.

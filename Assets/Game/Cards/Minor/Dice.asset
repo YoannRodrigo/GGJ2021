@@ -15,4 +15,5 @@ MonoBehaviour:
   cardName: Dice
   arcana: 1
   sprite: {fileID: 21300000, guid: 282fb5bbf532e504d8fd7dbaaeba8566, type: 3}
-  description: Move {VALUE} tiles.
+  description: <color=#f29f41>Move</color> the Gambler exactly <color=#2ab006>{VALUE}
+    tiles</color>.

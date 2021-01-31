@@ -27,6 +27,7 @@ public class Card : ScriptableObject {
     public string cardName;
     public CardArcana arcana;
     public Sprite sprite;
+    [TextArea(3,10)]
     public string description;
 
     public Card(string _name, CardArcana _arcana, Sprite _sprite, string _description){

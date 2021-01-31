@@ -22,19 +22,6 @@ public class UICardsController : MonoBehaviour
     public float zoomedCardRotationRange;
     public float zoomedCardRotationDuration;
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void ShowCard(int id, Card card){
         GameObject cardToShow = cards.transform.GetChild(id).gameObject;
 
