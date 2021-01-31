@@ -23,6 +23,7 @@ public class Wisp : MonoBehaviour
     {
         _objectPooler = ObjectPooler.Instance;
         FloatingYLoop();
+        _soundManager = SoundManager.instance;
         _soundManager.PlaySoundLoop("WispIdle");
     }
 

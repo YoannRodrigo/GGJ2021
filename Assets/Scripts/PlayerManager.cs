@@ -78,7 +78,6 @@ public class PlayerManager : MonoBehaviour
 
                 transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
                 speed = Mathf.Lerp(speed, 1, 5f * Time.deltaTime);
-                print(speed);
                 transform.DOMove(target.transform.position, 0.2f).SetEase(Ease.Linear);
             }
             else
