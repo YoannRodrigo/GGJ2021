@@ -18,8 +18,9 @@ public class OnMouseOverUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     //Do this when the cursor enters the rect area of this selectable UI object.
     public void OnPointerEnter(PointerEventData eventData)
     {
-        sequence.Kill();
-        sequence = MasterManager.Instance.sequencer.SQ_Move(gameObject, boundaries.y, 1, uICardsController.onMouseHoverDuration);
+        if(MasterManager.Instance.cardsManager.activeCardID != gameObject.transform.GetSiblingIndex()){
+            MasterManager.Instance.sequencer.Move(gameObject, boundaries.y, uICardsController.onMouseHoverDuration);
+        }
         uICardsController.currentHoveredCardID = gameObject.transform.GetSiblingIndex();
         uICardsController.zoomedCardController.DisplayZoomedCard();
 
@@ -27,8 +28,9 @@ public class OnMouseOverUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        sequence.Kill();
-        sequence = MasterManager.Instance.sequencer.SQ_Move(gameObject, boundaries.x, -1, uICardsController.onMouseHoverDuration);
-        uICardsController.currentHoveredCardID = -1;
+        if(MasterManager.Instance.cardsManager.activeCardID != gameObject.transform.GetSiblingIndex()){
+            MasterManager.Instance.sequencer.Move(gameObject, boundaries.x, uICardsController.onMouseHoverDuration);
+            uICardsController.currentHoveredCardID = -1;
+        }
     }
 }
