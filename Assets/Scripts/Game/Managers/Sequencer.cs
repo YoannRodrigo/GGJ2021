@@ -4,13 +4,14 @@ using UnityEngine;
 public class Sequencer : MonoBehaviour
 {
 
-    public void SQ_Move(GameObject target, float heightPos, int direction, float duration){
+    public Sequence SQ_Move(GameObject target, float heightPos, int direction, float duration){
         Sequence sq_moveUp = DOTween.Sequence();
 
         sq_moveUp
             .Append(target.GetComponent<RectTransform>().DOMoveY(heightPos * direction, duration)).SetEase(Ease.OutCubic);
         
         sq_moveUp.Play();
+        return sq_moveUp;
     }
 
     public void SQ_RotateLoop(GameObject target, float rotation, float duration){
