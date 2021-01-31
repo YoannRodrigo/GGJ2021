@@ -7,17 +7,24 @@ public class SplashScreen : MonoBehaviour
     [SerializeField] private VideoPlayer videoPlayer;
     [SerializeField] private Canvas canvas;
     private bool isVideoOver;
+    private int isFirstFrame;
+
     private void Update()
     {
-        if (!videoPlayer.isPlaying && !isVideoOver)
+        if(isFirstFrame > 5)
         {
-            isVideoOver = true;
-            canvas.gameObject.SetActive(true);
+            if (!videoPlayer.isPlaying && !isVideoOver)
+            {
+                isVideoOver = true;
+                canvas.gameObject.SetActive(true);
+            }
+
+            if (isVideoOver && Input.GetMouseButtonDown(0))
+            {
+                SceneManager.LoadScene(1);
+            }
         }
 
-        if (isVideoOver && Input.GetMouseButtonDown(0))
-        {
-            SceneManager.LoadScene(1);
-        }
+        isFirstFrame++;
     }
 }

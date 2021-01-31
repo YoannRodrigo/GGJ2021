@@ -404,7 +404,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1842989825}
   - component: {fileID: 1842989824}
-  - component: {fileID: 1842989826}
   m_Layer: 0
   m_Name: Video Player
   m_TagString: Untagged
@@ -435,14 +434,14 @@ VideoPlayer:
   m_AudioOutputMode: 2
   m_TargetAudioSources: []
   m_DirectAudioVolumes: []
-  m_Url: 
+  m_Url: https://dl.dropbox.com/s/m5ljkierzsqwmh7/WISP_SplashScreen.mp4?dl=1
   m_EnabledAudioTracks: 
   m_DirectAudioMutes: 
   m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 1
   m_SkipOnDrop: 1
   m_Looping: 0
-  m_WaitForFirstFrame: 0
+  m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
   m_VideoShaders: []
 --- !u!4 &1842989825
@@ -459,18 +458,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1842989826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1842989823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b59df9b9d9cda7848b8c78baa9cd1287, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2134156008
 GameObject:
   m_ObjectHideFlags: 0
