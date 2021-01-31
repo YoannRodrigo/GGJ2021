@@ -41,7 +41,8 @@ public class MasterManager : MonoBehaviour
                 case Card.CardFamily.DICE:
                     floorManager.ShowPlayerPath(minorArcanaCard.value + 1);
                     break;
-                case Card.CardFamily.TBD2:
+                case Card.CardFamily.SWORDS:
+                    floorManager.ShowPlayerAttack(minorArcanaCard.value);
                     break;
                 case Card.CardFamily.TBD3:
                     break;
