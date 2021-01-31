@@ -46,6 +46,11 @@ public class GroundTile : MonoBehaviour
         isActive = false;
     }
 
+    public void ForceActivate(bool force)
+    {
+        isForceDeactivate = force;
+    }
+    
     public void Activate()
     {
         isActive = true;

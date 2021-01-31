@@ -14,7 +14,7 @@ public class Card : ScriptableObject {
         NONE,
         WISPS,
         DICE,
-        TBD2,
+        SWORDS,
         TBD3
     }
 
