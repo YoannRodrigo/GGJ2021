@@ -90,7 +90,7 @@ public class GroundTile : MonoBehaviour
         }
         else
         {
-            foreach (Renderer componentsInChild in GetComponentsInChildren<Renderer>())
+            foreach (Renderer componentsInChild in GetComponentsInChildren<Renderer>(includeInactive: true))
             {
                 componentsInChild.enabled = true;
             }
