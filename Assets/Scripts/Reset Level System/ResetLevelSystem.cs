@@ -30,7 +30,7 @@ public class ResetLevelSystem : MonoBehaviour
     {
         PlayerSaveValues();
         WispSaveValues();
-        _soundManager.PlaySoundLoop("Music");
+        //_soundManager.PlaySoundLoop("Music");
         GetResetables();
     }
     private void Start()

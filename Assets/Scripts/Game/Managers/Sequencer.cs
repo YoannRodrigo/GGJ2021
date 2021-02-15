@@ -1,5 +1,7 @@
 ﻿using DG.Tweening;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Sequencer : MonoBehaviour
 {
@@ -32,5 +34,16 @@ public class Sequencer : MonoBehaviour
             .SetLoops(-1, LoopType.Yoyo);
         
         sq_upDown.Play();
+    }
+
+    public void SQ_BlinkText(GameObject target, float duration){
+        Sequence sq_blText = DOTween.Sequence();
+        Image img = target.GetComponent<Image>();
+
+        sq_blText
+            .Join(img.DOFade(0,duration)).SetEase(Ease.InSine)
+            .SetLoops(-1, LoopType.Yoyo);
+        
+        sq_blText.Play();
     }
 }
